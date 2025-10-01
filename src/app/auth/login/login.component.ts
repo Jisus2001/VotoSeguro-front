@@ -20,36 +20,6 @@ export class LoginComponent {
   constructor(private personasService: PersonasService, private router: Router) {}
 
   iniciarSesion() {
-    if (!this.identificacion && !this.contrasenna) {
-      this.mensaje = 'Por favor ingresa tus credenciales';
-      return;
-    }
-
-    if (!this.identificacion) {
-      this.mensaje = 'Por favor ingresa tu identificación';
-      return;
-    }
-
-    if (!this.contrasenna) {
-      this.mensaje = 'Por favor ingresa tu contraseña';
-      return;
-    }
-
-    this.personasService.login(this.identificacion, this.contrasenna).subscribe(
-      (res: any) => {
-        if (res && !res.error) {
-          this.mensaje = 'Inicio de sesión exitoso';
-          setTimeout(() => {
-            this.router.navigate(['/dashboard']);
-          }, 1500);
-        } else {
-          this.mensaje = res.mensaje || 'Credenciales incorrectas';
-        }
-      },
-      (error: any) => {
-        this.mensaje =
-          error.error?.mensaje || error.message || 'Credenciales incorrectas o error de conexión';
-      }
-    );
+    this.mensaje = 'Mensaje de prueba';
   }
 }
