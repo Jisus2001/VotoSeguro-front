@@ -2,8 +2,11 @@
   <header class="dashboard-header">
     <div class="logo">Votaciones UTN</div>
     <div class="user-info">
-      <span>Yarlín Granados</span>
-      <small>Administrador</small>
+      <div class="user-details">
+        <span>{{ nombre }}</span>
+        <small>{{ rol }}</small>
+      </div>
+      <button class="logout-button" (click)="cerrarSesion()">Cerrar sesión</button>
     </div>
   </header>
 
@@ -17,9 +20,6 @@
 
     <main class="main-content">
       <router-outlet></router-outlet>
-      
-  <button (click)="cerrarSesion()" class="logout-button">Cerrar sesión</button>
-
-</main>
+    </main>
   </div>
 </div>

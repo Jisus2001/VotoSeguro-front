@@ -38,6 +38,8 @@ export class LoginComponent {
     this.personasService.login(this.identificacion, this.contrasenna).subscribe(
       (res: any) => {
         if (res && !res.error) {
+          localStorage.setItem('nombre', res.nombre);
+          localStorage.setItem('rol', res.rol);
           this.mensaje = 'Inicio de sesión exitoso';
           setTimeout(() => {
             this.router.navigate(['/dashboard']);
