@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -7,5 +7,18 @@ import { RouterModule } from '@angular/router';
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
   imports: [RouterModule],
+
+  
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+  
+  constructor(private router: Router) {}
+
+  cerrarSesion() {
+    // Aquí puedes limpiar datos de sesión o tokens
+    localStorage.removeItem('token'); 
+    localStorage.removeItem('usuario');
+
+    // Redirige al login
+    this.router.navigate(['/login']);
+}}

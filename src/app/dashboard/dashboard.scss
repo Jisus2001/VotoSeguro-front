@@ -67,3 +67,18 @@
   background-color: #ffffff;
   overflow-y: auto;
 }
+
+.logout-button {
+  background-color: var(--hot-red);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-left: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.logout-button:hover {
+  background-color: var(--orange-red);
+}
