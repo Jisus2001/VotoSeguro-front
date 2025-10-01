@@ -36,8 +36,9 @@ export class LoginComponent {
         }
       },
       (error: any) => {
-        this.mensaje = error.message || 'Error al iniciar sesión';
-        console.error(error);
+        console.error('Error completo:', error);
+        this.mensaje =
+          error.error?.mensaje || error.message || 'Credenciales incorrectas o error de conexión';
       }
     );
   }

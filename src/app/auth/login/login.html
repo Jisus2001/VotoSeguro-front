@@ -33,7 +33,7 @@
       </div>
 
       <button type="submit" [disabled]="!form.valid">Entrar</button>
-      <p class="mensaje">{{ mensaje }}</p>
+      <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
     </form>
   </div>
 </div>
