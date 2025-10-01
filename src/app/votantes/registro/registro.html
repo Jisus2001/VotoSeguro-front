@@ -1,0 +1,61 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo-container">
+      <img src="logo.jpg" alt="Logo UTN" />
+      <h2>Registro UTN</h2>
+    </div>
+
+    <form (ngSubmit)="registrarUsuario()" #form="ngForm">
+      <div class="input-group">
+        <i class="fa fa-user"></i>
+        <input [(ngModel)]="nombre" name="nombre" placeholder="Nombre completo" required />
+      </div>
+
+      <div class="input-group">
+        <i class="fa fa-id-card"></i>
+        <input
+          [(ngModel)]="identificacion"
+          name="identificacion"
+          placeholder="Identificación"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <i class="fa fa-envelope"></i>
+        <input
+          [(ngModel)]="correo"
+          name="correo"
+          type="email"
+          placeholder="Correo electrónico"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <i class="fa fa-lock"></i>
+        <input
+          [(ngModel)]="contrasena"
+          name="contrasenna"
+          type="password"
+          placeholder="Contraseña"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <i class="fa fa-lock"></i>
+        <input
+          [(ngModel)]="confirmacion"
+          name="confirmacion"
+          type="password"
+          placeholder="Confirmar contraseña"
+          required
+        />
+      </div>
+
+      <button type="submit" [disabled]="!form.valid">Registrarse</button>
+      <p class="mensaje">{{ mensaje }}</p>
+    </form>
+  </div>
+</div>
