@@ -20,23 +20,33 @@ export class LoginComponent {
   constructor(private personasService: PersonasService, private router: Router) {}
 
   iniciarSesion() {
-    if (!this.identificacion || !this.contrasenna) {
+    if (!this.identificacion && !this.contrasenna) {
       this.mensaje = 'Por favor ingresa tus credenciales';
+      return;
+    }
+
+    if (!this.identificacion) {
+      this.mensaje = 'Por favor ingresa tu identificación';
+      return;
+    }
+
+    if (!this.contrasenna) {
+      this.mensaje = 'Por favor ingresa tu contraseña';
       return;
     }
 
     this.personasService.login(this.identificacion, this.contrasenna).subscribe(
       (res: any) => {
-        console.log(res);
-        this.mensaje = res.mensaje || res.error || 'Inicio de sesión exitoso';
-
-        // Si el login fue exitoso, redirige al dashboard
         if (res && !res.error) {
-          this.router.navigate(['/dashboard']);
+          this.mensaje = 'Inicio de sesión exitoso';
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 1500);
+        } else {
+          this.mensaje = res.mensaje || 'Credenciales incorrectas';
         }
       },
       (error: any) => {
-        console.error('Error completo:', error);
         this.mensaje =
           error.error?.mensaje || error.message || 'Credenciales incorrectas o error de conexión';
       }
