@@ -15,4 +15,8 @@ export class PersonasService {
       Contrasenna: contrasenna,
     });
   }
+
+  agregarPersona(persona: any) {
+    return this.http.post(`${this.apiUrl}/personas/Agregar`, persona);
+  }
 }

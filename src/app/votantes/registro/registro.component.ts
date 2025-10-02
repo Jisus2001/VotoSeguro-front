@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PersonasService } from '../../services/personas.service';
 
 @Component({
   standalone: true,
@@ -17,7 +18,40 @@ export class RegistroComponent {
   confirmacion = '';
   mensaje = '';
 
+  constructor(private personasService: PersonasService) {}
+
   registrarUsuario() {
-    // lógica de registro
+    if (
+      !this.nombre.trim() ||
+      !this.identificacion.trim() ||
+      !this.correo.trim() ||
+      !this.contrasena.trim() ||
+      !this.confirmacion.trim()
+    ) {
+      this.mensaje = 'Por favor completa todos los campos';
+      return;
+    }
+
+    if (this.contrasena !== this.confirmacion) {
+      this.mensaje = 'Las contraseñas no coinciden';
+      return;
+    }
+
+    const datos = {
+      Identificacion: this.identificacion,
+      Nombre: this.nombre,
+      Contrasenna: this.contrasena,
+      Correo: this.correo,
+      Perfil: 'Votante',
+    };
+
+    this.personasService.agregarPersona(datos).subscribe(
+      (res: any) => {
+        this.mensaje = res.mensaje || 'Registro exitoso';
+      },
+      (error: any) => {
+        this.mensaje = error.error?.mensaje || 'Error al registrar';
+      }
+    );
   }
 }

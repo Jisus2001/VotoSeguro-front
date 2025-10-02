@@ -7,55 +7,76 @@
 
     <form (ngSubmit)="registrarUsuario()" #form="ngForm">
       <div class="input-group">
-        <i class="fa fa-user"></i>
-        <input [(ngModel)]="nombre" name="nombre" placeholder="Nombre completo" required />
+        <input
+          [(ngModel)]="nombre"
+          name="nombre"
+          required
+          #nombreField="ngModel"
+          placeholder="Nombre completo"
+        />
+        <div *ngIf="nombreField.invalid && nombreField.touched" class="error">
+          El nombre es obligatorio
+        </div>
       </div>
 
       <div class="input-group">
-        <i class="fa fa-id-card"></i>
         <input
           [(ngModel)]="identificacion"
           name="identificacion"
-          placeholder="Identificación"
           required
+          #idField="ngModel"
+          placeholder="Identificación"
         />
+        <div *ngIf="idField.invalid && idField.touched" class="error">
+          La identificación es obligatoria
+        </div>
       </div>
 
       <div class="input-group">
-        <i class="fa fa-envelope"></i>
         <input
           [(ngModel)]="correo"
           name="correo"
-          type="email"
-          placeholder="Correo electrónico"
           required
+          email
+          #correoField="ngModel"
+          placeholder="Correo electrónico"
         />
+        <div *ngIf="correoField.invalid && correoField.touched" class="error">
+          Correo electrónico inválido
+        </div>
       </div>
 
       <div class="input-group">
-        <i class="fa fa-lock"></i>
         <input
           [(ngModel)]="contrasena"
-          name="contrasenna"
+          name="contrasena"
+          required
+          minlength="4"
+          #passField="ngModel"
           type="password"
           placeholder="Contraseña"
-          required
         />
+        <div *ngIf="passField.invalid && passField.touched" class="error">
+          La contraseña debe tener al menos 4 caracteres
+        </div>
       </div>
 
       <div class="input-group">
-        <i class="fa fa-lock"></i>
         <input
           [(ngModel)]="confirmacion"
           name="confirmacion"
+          required
+          #confField="ngModel"
           type="password"
           placeholder="Confirmar contraseña"
-          required
         />
+        <div *ngIf="confField.invalid && confField.touched" class="error">
+          Confirma tu contraseña
+        </div>
       </div>
 
-      <button type="submit" [disabled]="!form.valid">Registrarse</button>
-      <p class="mensaje">{{ mensaje }}</p>
+      <button type="submit">Registrarse</button>
+      <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
     </form>
   </div>
 </div>
