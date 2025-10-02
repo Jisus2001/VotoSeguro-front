@@ -3,9 +3,9 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
-  selector: 'app-dashboard',
+  selector: 'app-dashboard-votante',
   templateUrl: './dashboardvotante.html',
   styleUrls: ['./dashboardvotante.scss'],
   imports: [RouterModule],
 })
-export class DashboardComponent {}
+export class DashboardVotanteComponent {}
