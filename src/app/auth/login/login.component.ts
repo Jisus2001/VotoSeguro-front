@@ -38,13 +38,13 @@ export class LoginComponent {
     this.personasService.login(this.identificacion, this.contrasenna).subscribe(
       (res: any) => {
         if (res && !res.error) {
-          localStorage.setItem('nombre', res.nombre);
-          localStorage.setItem('rol', res.rol);
+          localStorage.setItem('nombre', res.Nombre);
+          localStorage.setItem('rol', res.Perfil);
           this.mensaje = 'Inicio de sesión exitoso';
           setTimeout(() => {
-            if (res.rol === 'Administrador') {
+            if (res.Perfil === 'Administrador') {
               this.router.navigate(['/dashboard']);
-            } else if (res.rol === 'votante') {
+            } else if (res.Perfil === 'Votante') {
               this.router.navigate(['/dashboardvotante']);
             } else {
               this.mensaje = 'Rol desconocido. Contacte al administrador.';
