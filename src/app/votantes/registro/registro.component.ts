@@ -27,9 +27,10 @@ export class RegistroComponent {
       !this.identificacion.trim() ||
       !this.correo.trim() ||
       !this.contrasena.trim() ||
-      !this.confirmacion.trim()
+      !this.confirmacion.trim() ||
+      !this.perfil.trim()
     ) {
-      this.mensaje = 'Por favor completa todos los campos';
+      this.mensaje = 'Por favor completa todos los campos del formulario';
       return;
     }
 
