@@ -74,6 +74,17 @@
           Confirma tu contraseña
         </div>
       </div>
+      <div class="input-group">
+        <label for="perfil">Perfil:</label>
+        <select [(ngModel)]="perfilField" name="perfil" required #perfilField="ngModel">
+          <option value="" disabled selected>Selecciona un perfil</option>
+          <option value="Votante">Votante</option>
+          <option value="Administrador">Administrador</option>
+        </select>
+        <div *ngIf="perfilField.invalid && perfilField.touched" class="error">
+          Selecciona un perfil
+        </div>
+      </div>
 
       <button type="submit">Registrarse</button>
       <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>

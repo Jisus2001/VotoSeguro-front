@@ -17,6 +17,7 @@ export class RegistroComponent {
   contrasena = '';
   confirmacion = '';
   mensaje = '';
+  perfil = '';
 
   constructor(private personasService: PersonasService) {}
 
@@ -42,7 +43,7 @@ export class RegistroComponent {
       Nombre: this.nombre,
       Contrasenna: this.contrasena,
       Correo: this.correo,
-      Perfil: 'Votante',
+      Perfil: this.perfil,
     };
 
     this.personasService.agregarPersona(datos).subscribe(

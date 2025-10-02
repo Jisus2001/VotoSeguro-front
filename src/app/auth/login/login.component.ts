@@ -42,8 +42,14 @@ export class LoginComponent {
           localStorage.setItem('rol', res.rol);
           this.mensaje = 'Inicio de sesión exitoso';
           setTimeout(() => {
-            this.router.navigate(['/dashboard']);
-          }, 1500);
+            if (res.rol === 'Administrador') {
+              this.router.navigate(['/dashboard']);
+            } else if (res.rol === 'votante') {
+              this.router.navigate(['/dashboardvotante']);
+            } else {
+              this.mensaje = 'Rol desconocido. Contacte al administrador.';
+            }
+          }, 1000);
         } else {
           this.mensaje = res.mensaje || 'Credenciales incorrectas';
         }
