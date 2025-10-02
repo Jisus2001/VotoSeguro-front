@@ -44,8 +44,8 @@ export class LoginComponent {
           setTimeout(() => {
             if (res.Perfil === 'Administrador') {
               this.router.navigate(['/dashboard']);
-            } else if (res.Perfil === 'Votante') {
-              this.router.navigate(['/dashboardvotante']);
+            } else if (res.rol === 'Votante') {
+              this.router.navigate(['/dashboard/dashboardVotante']);
             } else {
               this.mensaje = 'Rol desconocido. Contacte al administrador.';
             }

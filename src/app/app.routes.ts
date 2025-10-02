@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { RegistroComponent } from './votantes/registro/registro.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardVotanteComponent } from './dashboard/dashboardVotante/dashboardvotante.component';
 
 export const routes: Routes = [
   // Página inicial: login
@@ -12,6 +13,11 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     children: [{ path: 'registro', component: RegistroComponent }],
+  },
+
+  {
+    path: 'dashboardvotante',
+    component: DashboardVotanteComponent,
   },
 
   // Ruta directa al registro (opcional, si quieres permitir acceso fuera del dashboard)
