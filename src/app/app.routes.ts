@@ -3,11 +3,12 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegistroComponent } from './votantes/registro/registro.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardVotanteComponent } from './dashboard/dashboardVotante/dashboardvotante.component';
+import { OlvidarPassComponent } from './auth/olvidar-pass/olvidar-pass.component';
 
 export const routes: Routes = [
   // Página inicial: login
   { path: '', component: LoginComponent },
-
+  { path: 'olvidar', component: OlvidarPassComponent},
   // Dashboard con rutas hijas
   {
     path: 'dashboard',
