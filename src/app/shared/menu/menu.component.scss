@@ -1,0 +1,78 @@
+.sidebar-container {
+    background-color: white; 
+    height: 80vh; /* h-screen */
+    display: flex;
+    flex-direction: column; /* flex-col */
+    padding: 20px 15px; /* py-5 px-8 */
+    width: 280px; /* Ancho ajustado para que los botones quepan bien */
+}
+
+.menu-items-group {
+    margin-top: 40px; /* my-10 (más grande que my-2) */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacio entre los botones */
+}
+
+.menu-item {
+    /* Estilos base del botón */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start; /* Alinea los elementos a la izquierda */
+    padding: 10px 10px;
+    gap: 24px;
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    height: 55px; /* Altura ligeramente ajustada */
+    border: none;
+    cursor: pointer;
+    border-radius: 8px; /* Pequeño redondeado */
+    transition: background-color 0.2s, color 0.2s;
+    background-color: transparent; /* bg-transparent */
+    color: rgb(5, 44, 101); /* Color de texto por defecto */
+}
+
+/* Estilo al pasar el ratón */
+.menu-item:hover {
+    background-color: #e6510053; /* Un gris muy claro al pasar el ratón */
+}
+
+/* ----------------------------------------------------- */
+/* ESTADO ACTIVO (Ruta seleccionada) */
+/* ----------------------------------------------------- */
+.menu-item.activo {
+    background-color: #e65100; /* Fondo del color principal de la UTN */
+    color: #ffffff; /* Texto blanco en estado activo */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.menu-item.activo p {
+    color: #ffffff; /* Asegura que el texto sea blanco */
+}
+
+/* ----------------------------------------------------- */
+/* ICONO (Sustituye .icono) */
+/* ----------------------------------------------------- */
+.icono {
+    width: 30px !important;
+    height: 30px !important;
+    /* Para dar un efecto visual extra en el estado activo */
+    filter: grayscale(100%) brightness(0.5); /* Icono por defecto en escala de grises/oscuro */
+}
+
+.menu-item.activo .icono {
+    filter: none; /* Icono a color/normal en activo */
+}
+
+/* ----------------------------------------------------- */
+/* TEXTO (Sustituye .texto) */
+/* ----------------------------------------------------- */
+.menu-item p {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 32px;
+    margin: 0; /* Elimina el margen por defecto del p */
+    color: inherit; /* Hereda el color del .menu-item (azul por defecto, blanco en activo) */
+}

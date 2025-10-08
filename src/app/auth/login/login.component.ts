@@ -83,6 +83,9 @@ export class LoginComponent {
         .subscribe(
           (res: any) => {
 
+            localStorage.setItem('Nombre', res.nombre);
+            localStorage.setItem('Rol', res.rol);
+
             this.noti.mensaje(
               'Bienvenido a Voto Seguro',
               `Se ha logrado iniciar sesión con éxito.`,

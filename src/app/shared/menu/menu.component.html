@@ -1,0 +1,45 @@
+<!-- menu.component.html -->
+<div class="sidebar-container">
+  
+  <!-- Inicio Botones -->
+  <div class="menu-items-group">
+    
+    <button class="menu-item" (click)="onItemSelected({ displayName: 'Dashboard', route: '/dashboard' })"
+      [class.activo]="router.isActive('/dashboard', true)">
+      <img class="icono" src="../../../assets/menu-items/panel.png" alt="Dashboard" />
+      <p>Dashboard</p>
+    </button>
+    
+    <button class="menu-item" (click)="onItemSelected({ displayName: 'Votantes', route: '/votantes' })"
+      [class.activo]="router.isActive('/votantes', true)">
+      <img class="icono" src="../../../assets/menu-items/votante.png" alt="Votantes"/>
+      <p>Votantes</p>
+    </button>
+    
+    <button class="menu-item" (click)="onItemSelected({ displayName: 'Elecciones', route: '/elecciones' })"
+      [class.activo]="router.isActive('/elecciones', true)">
+      <img class="icono" src="../../../assets/menu-items/eleccion.png" alt="Elecciones"/>
+      <p>Elecciones</p>
+    </button>
+    
+    <button class="menu-item" (click)="onItemSelected({ displayName: 'Reportes', route: '/reportes' })"
+        [class.activo]="router.isActive('/reportes', true)"
+    >
+      <img class="icono" src="../../../assets/menu-items/reporte-de-negocios.png" alt="Reportes" />
+      <p>Reportes</p>
+    </button>
+    
+    <button class="menu-item" (click)="onItemSelected({ displayName: 'Ajustes', route: '/ajustes' })"
+      [class.activo]="router.isActive('/ajustes', true)">
+      <img class="icono" src="../../../assets/menu-items/ajustes.png" alt="Ajustes" />
+      <p>Ajustes</p>
+    </button>
+    
+    <button class="menu-item" (click)="onItemSelected({ displayName: 'Cerrar Sesión', route: '/login' })"
+      [class.activo]="router.isActive('/logout', true)">
+      <img class="icono" src="../../../assets/menu-items/cerrar-sesion.png" alt="Cerrar Sesión" />
+      <p>Cerrar Sesión</p>
+    </button>
+  </div>
+  <!-- FIN Botones -->
+</div>

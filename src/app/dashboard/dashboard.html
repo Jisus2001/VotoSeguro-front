@@ -1,25 +1,15 @@
 <div class="dashboard-wrapper">
-  <header class="dashboard-header">
-    <div class="logo">Votaciones UTN</div>
-    <div class="user-info">
-      <div class="user-details">
-        <span>{{ nombre }}</span>
-        <small>{{ rol }}</small>
-      </div>
-      <button class="logout-button" (click)="cerrarSesion()">Cerrar sesión</button>
-    </div>
-  </header>
-
+  <app-header></app-header>
   <div class="dashboard-body">
     <aside class="sidebar">
-      <nav>
-        <a routerLink="/dashboard/registro" routerLinkActive="active">Registro</a>
-        <!-- Puedes agregar más secciones aquí -->
-      </nav>
+      <app-menu></app-menu>
     </aside>
 
     <main class="main-content">
-      <router-outlet></router-outlet>
+      <router-outlet>
+        <img src="../../../assets/logo.jpg" alt="Logo UTN" style="border-radius: 15px; " />
+
+      </router-outlet>
     </main>
   </div>
 </div>
