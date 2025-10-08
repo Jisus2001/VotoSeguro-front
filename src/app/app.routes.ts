@@ -6,6 +6,8 @@ import { OlvidarPassComponent } from './auth/olvidar-pass/olvidar-pass.component
 import { LogoutComponent } from './shared/logout/logout.component';
 import { VotantesIndexComponent } from './votantes/votantes-index/votantes-index.component';
 import { NgModule } from '@angular/core';
+import { EleccionesIndexComponent } from './elecciones/elecciones-index/elecciones-index.component';
+import { SedesIndexComponent } from './sedes/sedes-index/sedes-index.component';
 
 export const routes: Routes = [
   // Página inicial: login
@@ -30,6 +32,15 @@ export const routes: Routes = [
     
   },
 
+    { 
+    path: 'elecciones', component: EleccionesIndexComponent,
+    
+  },
+
+      { 
+    path: 'sedes', component: SedesIndexComponent,
+    
+  },
 
   // Ruta directa al registro (opcional, si quieres permitir acceso fuera del dashboard)
   // { path: 'registro', component: RegistroComponent },

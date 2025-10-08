@@ -1,0 +1,112 @@
+<!-- Main modal -->
+<div id="authentication-modal" tabindex="-1" aria-hidden="true"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75 scrollable"
+    [class.hidden]="!isVisible">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow" style="color: rgb(5, 44, 101);
+">
+            <div class="px-5 pt-5 flex justify-end">
+                <button type="button" (click)="closeModal()"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal header -->
+            <div class="flex items-center justify-center">
+                <div>
+                    <h3 class="text-2xl text-center font-semibold text-[#252b36] pb-4">
+                        {{titleForm}} de partido eletroral
+                    </h3>
+                </div>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5">
+                <!-- Formulario para crear o actualizar usuario -->
+                <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+                    <div>
+                        <label for="name" class="block mb-2 text-sm font-medium text-[#344054]">Nombre</label>
+                        <input type="text" id="Nombre" placeholder="Nombre completo" name="Nombre"
+                            formControlName="Nombre"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            required />
+                        @if (errorHandling('Nombre', 'required')) {
+                        <mat-error>
+                            El nombre es <strong>requerido</strong>.
+                        </mat-error>
+                        }
+                    </div>
+
+                    <div>
+
+                        <!-- Sede (Selección) -->
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Sede Asociada</mat-label>
+                            <mat-select formControlName="SedeId">
+                                <mat-option *ngFor="let sede of sedeList" [value]="sede.IdSede">
+                                    {{ sede.Nombre }} (ID: {{ sede.IdSede }})
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="errorHandling('SedeId', 'required')">
+                                La sede es obligatoria.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        <div>
+                            <label for="FechaInicio" class="block mb-2 text-sm font-medium text-[#344054]">Fecha de
+                                Inicio
+                            </label>
+                            <input matInput type="date" name="FechaInicio" id="FechaInicio"
+                                formControlName="FechaInicio"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                required />
+                            @if (errorHandling('FechaInicio', 'required')) {
+                            <mat-error>
+                                La fecha de inicio <strong>requerida</strong>.
+                            </mat-error>
+                            }
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            <label for="FechaFin" class="block mb-2 text-sm font-medium text-[#344054]">Fecha de
+                                cierre
+                            </label>
+                            <input matInput type="date" name="FechaFin" id="FechaFin" formControlName="FechaFin"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                required />
+                            @if (errorHandling('FechaInicio', 'required')) {
+                            <mat-error>
+                                La fecha de cierre <strong>requerida</strong>.
+                            </mat-error>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Validación de Rango de Fechas (Global) -->
+                    <div *ngIf="
+              userForm.errors?.['dateRangeInvalid'] &&
+              userForm.get('FechaFin')?.dirty
+            " class="text-red-600 mb-4 p-2 bg-red-100 border border-red-300 rounded">
+                        La Fecha de cierre no puede ser anterior o igual a la Fecha de Inicio.
+                    </div>
+
+                    <button type="submit" [disabled]="userForm.invalid"
+                        class="mt-4 w-full text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200"
+                        style="background-color: #e65100;">
+                        Guardar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

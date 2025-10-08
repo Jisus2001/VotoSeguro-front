@@ -132,7 +132,6 @@ export class VotantesCreateComponent {
     this.userForm.reset();
     this.isCreate = true;
     this.titleForm = 'Creación';
-    this.userForm.get('Identificacion')?.enable(); // Asegurarse de que esté habilitado para Crear
 
     this.isVisible = true;
 
