@@ -42,8 +42,8 @@ export class PersonasService {
     this.isLogin = false;
     const usuario = localStorage.getItem('usuario');
     if (usuario) {
-      localStorage.removeItem('Nombre');
-      localStorage.removeItem('Rol')
+      window.localStorage.removeItem('Nombre');
+      window.localStorage.removeItem('Rol')
       return true;
     }
     return false;

@@ -1,7 +1,7 @@
 .dashboard-wrapper {
   display: flex;
   flex-direction: column;
-  height: auto;
+  height: 100%;
   font-family: 'Segoe UI', sans-serif;
   background-color: #f5f7fa;
   color:  rgb(5, 44, 101);
@@ -21,6 +21,13 @@
   padding: 20px 0;
 }
 
+.main-content img {
+  display: block;
+  margin: 0 auto;
+  max-width: 450px; 
+  height: auto;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+}
 // .sidebar nav a.active,
 // .sidebar nav a:hover {
 //   background-color: #f57c00;
@@ -32,6 +39,7 @@
   padding: 40px;
   background-color: #ffffff;
   overflow-y: auto;
+  
 }
 
 .titulo {
