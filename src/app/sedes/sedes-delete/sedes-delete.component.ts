@@ -17,9 +17,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-votantes-desactivar',
+  selector: 'app-sedes-delete',
   standalone: true,
-
   imports: [
     CommonModule,
     FormsModule,
@@ -30,19 +29,18 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatIconModule,
   ],
-  templateUrl: './votantes-desactivar.component.html',
-  styleUrl: './votantes-desactivar.component.scss',
+  templateUrl: './sedes-delete.component.html',
+  styleUrl: './sedes-delete.component.scss',
 })
-export class VotantesDesactivarComponent {
+export class SedesDeleteComponent {
   isVisible = false;
-  idUser: number = 0;
-  Identificacion: any; // Usado como Cédula/ID
+  IdSede: any;
   userData: any;
   respuesta: any;
   destroy$: Subject<boolean> = new Subject<boolean>();
-  userForm: FormGroup;
+  userForm!: FormGroup;
 
-  @Output() votanteDesactivado: EventEmitter<number> = new EventEmitter<number>();
+  @Output() sedeDelete: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(
     public fb: FormBuilder,
@@ -50,9 +48,8 @@ export class VotantesDesactivarComponent {
     private gService: GenericService,
     private noti: NotificacionService
   ) {
-    // Inicializar el formulario aquí en el constructor
     this.userForm = this.fb.group({
-      Identificacion: ['', Validators.required],
+      IdSede: ['', Validators.required],
     });
   }
 
@@ -60,35 +57,35 @@ export class VotantesDesactivarComponent {
   openModal(id?: any) {
     this.isVisible = true;
     if (id !== undefined && !isNaN(Number(id))) {
-      this.loadUser(id);
+      this.loadSede(id);
     }
+    this.IdSede = id;
   }
 
-  // Método para cerrar el modal
   closeModal() {
     this.isVisible = false;
   }
-  onReset(){
-    this.userForm.reset(); 
+
+  onReset() {
+    this.userForm.reset();
   }
 
   // Método para manejar el envío del formulario
   onSubmit() {
-    console.log(this.Identificacion); 
-    if (this.userForm.value) {
+    if (this.userForm !== null) {
       this.gService
-        .remove(`personas/Eliminar`, this.Identificacion)
+        .remove(`sedes/Eliminar`, this.IdSede)
         .pipe(takeUntil(this.destroy$))
         .subscribe(
           (data: any) => {
             this.respuesta = data;
             this.noti.mensaje(
-              'Votantes • Eliminación',
-              `El votante ha sido eliminado exitosamente.`,
+              'Sede • Eliminación',
+              `La sede ha sido eliminado exitosamente.`,
               TipoMessage.success
             );
             /* this.usuarioModificado.emit(); */
-            this.votanteDesactivado.emit(this.Identificacion);
+            this.sedeDelete.emit(this.IdSede);
           },
           (error) => {
             console.error('Error en la petición:', error);
@@ -98,19 +95,15 @@ export class VotantesDesactivarComponent {
     this.closeModal();
   }
 
-  loadUser(id: any): void {
-
-    this.Identificacion = id; 
+  loadSede(id: any): void {
+    console.log(this.IdSede);
+    console.log(id);
 
     this.gService
-      .get('personas/ObtenerPersona', id)
+      .get('sedes/ObtenerSede', id)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
         this.userData = data;
-        this.userForm.setValue({
-          Identificacion: this.userData.Identificacion,
-        });
       });
-    console.log(this.Identificacion);
   }
 }

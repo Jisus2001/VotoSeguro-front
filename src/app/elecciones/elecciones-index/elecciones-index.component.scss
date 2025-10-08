@@ -1,0 +1,91 @@
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
+  color: rgb(5, 44, 101);
+}
+
+.dashboard-body {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: auto;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: rgb(5, 44, 101);
+
+  padding: 20px 0;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+.page-title {
+  font-style: italic;
+  font-weight: bold;
+  font-size: 30px;
+  color: rgb(5, 44, 101);
+}
+
+mat-select,
+mat-form-field,
+mat-input {
+  color: rgb(5, 44, 101);
+}
+
+.btncrear {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  padding: 5px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btncrear:hover {
+  background-color: #e6510053;
+}
+
+.filter-container {
+  background-color: aqua;
+}
+
+.icon-margin-right {
+  margin-right: 0.5rem;
+}
+
+//Sirve para la tabla
+table {
+  border-collapse: separate;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: rgb(5, 44, 101);
+}
+
+mat-option,
+mat-select-panel {
+  color: rgb(5, 44, 101);
+  background-color: #ffffff;
+}
+
+.colcolor {
+  background-color: #e5eaf6 !important;
+  text-transform: uppercase;
+    color: #0e2148;
+    font-weight: bold;
+}
+
+td {
+  color: #4e5d7c;
+}

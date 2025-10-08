@@ -1,0 +1,91 @@
+<div class="dashboard-wrapper">
+    <app-header></app-header>
+    <div class="dashboard-body">
+        <aside class="sidebar">
+            <app-menu></app-menu>
+        </aside>
+
+        <main class="main-content">
+            <!-- Contenedor principal para aplicar estilos SCSS -->
+
+            <!-- Encabezado y botón de acción -->
+            <h1 class="page-title">Listado de Sedes</h1>
+
+            <div class="table-card">
+
+                <!-- Contenedor de Filtros -->
+                <div class="filters-container flex w-full h-fit p-4 px-8 bg-white z-10 relative">
+    
+                    <div>
+                        <button class="btncrear hover:bg-[#e6510053]" style="background-color: #e65100; color: #ffffff;"
+                            (click)="crear()" mat-raised-button>
+                            <i class="fas fa-plus icon-margin-right"></i>
+                            Nuevo Sede
+                        </button>
+                    </div>
+
+                  </div>
+
+
+                <!-- Contenedor de la Tabla -->
+                <div class="relative overflow-x-auto p-3">
+                    <table mat-table [dataSource]="dataSource" matSort class="w-full text-sm text-left rtl:text-right ">
+
+                        <!-- Columna: Id -->
+                        <ng-container matColumnDef="IdSede">
+                            <th scope="col" class="border text-xs text-black border-white colcolor" mat-header-cell
+                                *matHeaderCellDef mat-sort-header> Identificador </th>
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
+                                *matCellDef="let row"> {{ row.IdSede }} </td>
+                        </ng-container>
+
+                        <!-- Columna: Nombre -->
+                        <ng-container matColumnDef="Nombre">
+                            <th scope="col" class=" border text-xs text-black border-white colcolor" mat-header-cell
+                                *matHeaderCellDef mat-sort-header>
+                                Nombre </th>
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
+                                *matCellDef="let row">
+                                {{ row.Nombre }} </td>
+                        </ng-container>
+
+                        <!-- Columna: Acciones -->
+                        <ng-container matColumnDef="accion">
+                            <th scope="col" class="border text-xs text-black border-white colcolor" mat-header-cell
+                                *matHeaderCellDef mat-sort-header> Acciones </th>
+
+                            <td mat-cell *matCellDef="let row">
+                                <div class="flex  gap-5">
+                                    <!-- Botón Eliminar / Desactivar -->
+                                    <button mat-icon-button (click)="delete(row.IdSede)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                        <!-- Mensaje de no datos -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell no-data-message" [attr.colspan]="displayedColumns.length">
+                                No se encontraron datos que coincidan con los filtros.
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div>
+                        <!-- Paginador -->
+                        <mat-paginator #paginator [lang]="'es'" [length]="dataSource.data.length" [pageIndex]="0"
+                            [pageSize]="5" aria-label="Seleccione una página">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<app-sedes-create #sedeFormModal></app-sedes-create>
+<app-sedes-delete #deleteSedeModal></app-sedes-delete>

@@ -1,0 +1,163 @@
+<div class="dashboard-wrapper">
+    <app-header></app-header>
+    <div class="dashboard-body">
+        <aside class="sidebar">
+            <app-menu></app-menu>
+        </aside>
+
+        <main class="main-content">
+            <!-- Contenedor principal para aplicar estilos SCSS -->
+
+            <!-- Encabezado y botón de acción -->
+            <h1 class="page-title">Listado de Partidos Electorales</h1>
+
+            <div class="table-card">
+
+                <!-- Contenedor de Filtros -->
+                <div class="filters-container flex w-full h-fit p-4 px-8 bg-white z-10 relative">
+
+                    <!-- Filtro por Sede (Dropdown) -->
+                    <mat-form-field class="max-w-xs md:max-w-sm">
+                        <mat-label>Filtrar por Sede</mat-label>
+                        <!-- Usamos selectedSede y datosSede -->
+                        <mat-select [(ngModel)]="selectedSede" (selectionChange)="onFilterChange()"
+                            class="h-fit font-semibold rounded-lg text-sm inline-flex items-center border-gray-300">
+                            <!-- Opción para ver TODOS -->
+                            <mat-option value="Todos">
+                                Todas las Sedes
+                            </mat-option>
+                            <!-- Recorrido de las sedes cargadas dinámicamente -->
+                            @for (sede of datosSede; track sede.IdSede) {
+                            <!-- Usamos el IdSede como el valor único para filtrar -->
+                            <mat-option [value]="sede.IdSede">
+                                {{ sede.Nombre }}
+                            </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    
+                    <span class="example-spacer"></span>
+
+                    <!-- Filtro por Cédula / Identificación -->
+                    <div class="max-w-md mx-auto">
+                        <mat-form-field class="relative">
+                            <input matInput type="search" placeholder="Buscar por nombre" [(ngModel)]="searchNombre"
+                                (keyup)="onFilterChange()"
+                                class="block w-full h-11 p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-transparent focus:ring-indigo-600 focus:border-indigo-600">
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+                    </div>
+
+                    <span class="example-spacer"></span>
+
+                    <div>
+                        <button class="btncrear hover:bg-[#e6510053]" style="background-color: #e65100; color: #ffffff;"
+                            (click)="crear()" mat-raised-button>
+                            <i class="fas fa-plus icon-margin-right"></i>
+                            Nuevo Partido
+                        </button>
+                    </div>
+
+                    <span class="example-spacer"></span>
+
+                    <div>
+                        <button class="btncrear hover:bg-[#e6510053]" style="background-color: #e65100; color: #ffffff;"
+                            (click)="redirectSedes()" mat-raised-button>
+                            <i class="fa-solid fa-circle-info"></i>
+                            Sedes
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Contenedor de la Tabla -->
+                <div class="relative overflow-x-auto p-3">
+                    <table mat-table [dataSource]="dataSource" matSort class="w-full text-sm text-left rtl:text-right ">
+
+                        <!-- Columna: Nombre -->
+                        <ng-container matColumnDef="Nombre">
+                            <th scope="col" class=" border text-xs text-black border-white colcolor" mat-header-cell
+                                *matHeaderCellDef mat-sort-header>
+                                Nombre Completo </th>
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
+                                *matCellDef="let row">
+                                {{ row.Nombre }} </td>
+                        </ng-container>
+
+                        <!-- Columna: FechaInicio -->
+                        <ng-container matColumnDef="FechaInicio">
+                            <th scope="col" class="border text-xs text-black border-white colcolor" mat-header-cell
+                                *matHeaderCellDef mat-sort-header>
+                                Fecha de inicio </th>
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
+                                *matCellDef="let row"> {{ row.FechaInicio | date: 'dd/MM/yyyy' }} </td>
+                        </ng-container>
+
+                        <!-- Columna: FechaFin -->
+                        <ng-container matColumnDef="FechaFin">
+                            <th scope="col" class="border text-xs text-black border-white colcolor" mat-header-cell
+                                *matHeaderCellDef mat-sort-header> Fecha de cierre </th>
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
+                                *matCellDef="let row"> {{ row.FechaFin | date: 'dd/MM/yyyy' }} </td>
+                        </ng-container>
+
+                        <!-- Columna: FechaFin -->
+                        <ng-container matColumnDef="Sede">
+                            <th scope="col" class="border text-xs text-black border-white colcolor" mat-header-cell
+                                *matHeaderCellDef mat-sort-header> Sede </th>
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
+                                *matCellDef="let row"> {{ row.Sede.Nombre }} </td>
+                        </ng-container>
+
+                        <!-- Columna: Acciones -->
+                        <ng-container matColumnDef="accion">
+                            <th scope="col" class="border text-xs text-black border-white colcolor" mat-header-cell
+                                *matHeaderCellDef mat-sort-header> Acciones </th>
+
+                            <td mat-cell *matCellDef="let row">
+                                <div class="flex  gap-5">
+
+                                    <!-- Botón Detalle -->
+                                    <button mat-icon-button (click)="redirectDetalle(row._id)">
+                                        <mat-icon>visibility</mat-icon>
+                                    </button>
+
+                                    <!-- Botón Editar (No visible si el usuario logueado es Operario intentando editar a un Admin o a sí mismo, según tu lógica original) -->
+                                    <!-- Nota: Ajusté la condición basándome en tu lógica previa, pero usando el campo Perfil -->
+                                    <button mat-icon-button (click)="update(row._id)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+
+                                    <!-- Botón Eliminar / Desactivar -->
+                                    <button mat-icon-button (click)="delete(row._id)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                        <!-- Mensaje de no datos -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell no-data-message" [attr.colspan]="displayedColumns.length">
+                                No se encontraron datos que coincidan con los filtros.
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div>
+                        <!-- Paginador -->
+                        <mat-paginator #paginator [lang]="'es'" [length]="dataSource.data.length" [pageIndex]="0"
+                            [pageSize]="5" aria-label="Seleccione una página">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<app-elecciones-create #eleccionFormModal></app-elecciones-create>
+<app-elecciones-delete #deleteEleccionModal></app-elecciones-delete>
