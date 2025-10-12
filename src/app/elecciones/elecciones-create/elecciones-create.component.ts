@@ -43,9 +43,10 @@ interface Sede {
 export class EleccionesCreateComponent implements OnInit {
   sedeList: Sede[] = [];
   isVisible: any;
-  idEleccion: any;
+  idEleccion: number | null = null;
   Nombre: any;
   SedeId: any;
+  PerfilId: any;
   FechaInicio: any;
   FechaFin: any;
 
@@ -95,8 +96,8 @@ export class EleccionesCreateComponent implements OnInit {
     start.setHours(0, 0, 0, 0);
     end.setHours(0, 0, 0, 0);
 
-    // Rechaza si FechaFin es menor o igual a FechaInicio
-    if (end <= start) {
+    // Rechaza si FechaFin es menor a la FechaInicio
+    if (end < start) {
       return { dateRangeInvalid: true };
     }
 
@@ -106,10 +107,12 @@ export class EleccionesCreateComponent implements OnInit {
   reactiveForm() {
     this.userForm = this.fb.group(
       {
+        idEleccion: [''],
         Nombre: ['', Validators.required],
         SedeId: [null, Validators.required],
         FechaInicio: [null, Validators.required],
         FechaFin: [null, Validators.required],
+        PerfilId: 1,
       },
       {
         validator: EleccionesCreateComponent.dateRangeValidator,
@@ -136,6 +139,25 @@ export class EleccionesCreateComponent implements OnInit {
     this.loadSedes();
   }
 
+  openModal(id?: any) {
+    this.isVisible = true;
+    console.log(id);
+
+    if (id !== undefined) {
+      // Modo Actualización
+      this.isCreate = false;
+      this.titleForm = 'Actualización';
+      this.idEleccion = id;
+      this.loadData(id);
+    } else {
+      // Modo Creación
+      this.userForm.reset();
+      this.isCreate = true;
+      this.titleForm = 'Creación';
+      this.idEleccion = null;
+    }
+  }
+
   loadSedes() {
     this.gService
       .list('sedes/Listar')
@@ -155,41 +177,63 @@ export class EleccionesCreateComponent implements OnInit {
       });
   }
 
-  openModal(id?: any) {
-    this.userForm.reset();
-    this.isCreate = true;
-    this.titleForm = 'Creación';
-    this.isVisible = true;
-
-    if (id !== undefined && !isNaN(Number(id))) {
-      this.loadData(id);
-    }
-  }
-
   closeModal() {
     this.userForm.reset();
     this.submitted = false;
     this.isVisible = false;
+    this.idEleccion = null;
   }
 
-  loadData(id: any): void {
+  private formatISOToInputDate(isoString: string | null): string | null {
+    if (!isoString) {
+      return null;
+    }
+    // Convertimos la cadena ISO a un objeto Date
+    const date = new Date(isoString);
+
+    // Obtenemos los componentes de la fecha
+    const year = date.getFullYear();
+    // getMonth() es base 0, por eso sumamos 1
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    // Juntamos en el formato 'YYYY-MM-DD'
+    return `${year}-${month}-${day}`;
+  }
+
+  loadData(id: any) {
     this.isCreate = false;
     this.titleForm = 'Actualización';
     this.idEleccion = id;
 
     this.gService
-      .get('elecciones/ObtenerEleccion', id)
+      .get('elecciones/ObtenerEleccion', this.idEleccion)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data: any) => {
-        this.user = data;
+      .subscribe(
+        (data: any) => {
+          this.user = data;
 
-        this.userForm.patchValue({
-          Nombre: this.user.Nombre,
-          SedeId: this.user.SedeId,
-          FechaInicio: this.user.FechaInicio,
-          FechaFin: this.user.FechaFin,
-        });
-      });
+          const fechaInicioInput = this.formatISOToInputDate(this.user.FechaInicio);
+          const fechaFinInput = this.formatISOToInputDate(this.user.FechaFin);
+
+          this.userForm.patchValue({
+            Nombre: this.user.Nombre,
+            SedeId: this.user.Sede.IdSede,
+            PerfilId: 1,
+            FechaInicio: fechaInicioInput, // Asignamos el objeto Date
+            FechaFin: fechaFinInput,
+          });
+          console.log(this.userForm.value);
+        },
+        (error: any) => {
+          console.error('Error al cargar datos de la elección:', error);
+          this.noti.mensaje(
+            'Error de carga',
+            'No se pudo obtener la información de la elección.',
+            TipoMessage.error
+          );
+        }
+      );
   }
 
   onSubmit() {
@@ -209,7 +253,7 @@ export class EleccionesCreateComponent implements OnInit {
     if (this.userForm.errors?.['dateRangeInvalid']) {
       this.noti.mensaje(
         'Validación de Fechas',
-        'La Fecha de Fin no puede ser igual o anterior a la Fecha de Inicio.',
+        'La Fecha de cierre no puede ser anterior a la Fecha de inicio.',
         TipoMessage.warning
       );
       return;
@@ -218,9 +262,13 @@ export class EleccionesCreateComponent implements OnInit {
     // Formato de fechas al estándar ISO 8601 que el backend espera
     const formData = {
       ...this.userForm.value,
+      SedeId: Number(this.userForm.value.SedeId),
+      PerfilId: 1,
       FechaInicio: new Date(this.userForm.value.FechaInicio).toISOString(),
       FechaFin: new Date(this.userForm.value.FechaFin).toISOString(),
     };
+
+    console.log(formData);
 
     if (this.isCreate) {
       if (this.userForm.value) {
@@ -255,19 +303,25 @@ export class EleccionesCreateComponent implements OnInit {
       }
     } else {
       this.gService
-        .update('elecciones/Actualizar', formData)
+        .update(`elecciones/Actualizar/${this.idEleccion}`, formData)
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: any) => {
           this.respuesta = data;
           this.noti.mensaje(
-            'Partido Electoral Actualizado',
-            `El partido ha sido actualizado con éxito.`,
+            'Elección ° Actualizada',
+            `La elección ha sido actualizado con éxito.`,
             TipoMessage.success
           );
           this.eleccionCreada.emit();
-          this.router.navigate(['/elecciones']);
+          this.closeModal();
         });
     }
+
+    // Emitir evento para refrescar la página padre
+    this.eleccionCreada.emit();
+
+    // Cerrar el modal después de la creación
+    this.closeModal();
 
     // Nota sobre HU 3 Restricción: La restricción de candidatos registrados
     // es una funcionalidad de backend (asociación de candidatos) que generalmente
