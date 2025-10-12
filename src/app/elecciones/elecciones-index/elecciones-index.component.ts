@@ -17,6 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { EleccionesCreateComponent } from '../elecciones-create/elecciones-create.component';
 import { EleccionesDeleteComponent } from '../elecciones-delete/elecciones-delete.component';
+import { EleccionesDetailComponent } from '../elecciones-detail/elecciones-detail.component';
 
 export interface Elecciones {
   _id: number;
@@ -56,6 +57,7 @@ export interface Sedes {
     MatSelectModule,
     EleccionesCreateComponent,
     EleccionesDeleteComponent,
+    EleccionesDetailComponent,
   ],
   templateUrl: './elecciones-index.component.html',
   styleUrl: './elecciones-index.component.scss',
@@ -65,6 +67,7 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('eleccionFormModal') eleccionFormModal!: EleccionesCreateComponent;
   @ViewChild('deleteEleccionModal') deleteEleccionModal!: EleccionesDeleteComponent;
+  @ViewChild('eleccionDetalleModal') eleccionDetalleModal!: EleccionesDetailComponent;
 
   dataSource = new MatTableDataSource<Elecciones>();
   datos: Elecciones[] = []; // Datos de ejemplo
@@ -181,7 +184,9 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
     this.updateTable(currentData);
   }
 
-  redirectDetalle(_id: any) {}
+  redirectDetalle(id: any) {
+    this.eleccionDetalleModal.openModal(id); 
+  }
 
   crear() {
     this.eleccionFormModal.openModal();

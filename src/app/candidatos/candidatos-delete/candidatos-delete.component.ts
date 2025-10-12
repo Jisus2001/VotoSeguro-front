@@ -88,7 +88,6 @@ isVisible = false;
         this.userForm.setValue({
           Nombre: this.userData.Nombre,
         });
-        console.log(this.userForm.value); 
       });
   }
 

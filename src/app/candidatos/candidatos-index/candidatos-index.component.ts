@@ -16,6 +16,8 @@ import { GenericService } from '../../shared/generic.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { CandidatosDeleteComponent } from '../candidatos-delete/candidatos-delete.component';
+import { CandidatosCreateComponent } from '../candidatos-create/candidatos-create.component';
+import { CandidatosDetailComponent } from '../candidatos-detail/candidatos-detail.component';
 
 export interface Candidatos {
   _id: number;
@@ -52,6 +54,8 @@ export interface Perfil {
     MatIconModule,
     MatSelectModule,
 
+    CandidatosCreateComponent,
+    CandidatosDetailComponent,
     CandidatosDeleteComponent,
   ],
   templateUrl: './candidatos-index.component.html',
@@ -60,7 +64,8 @@ export interface Perfil {
 export class CandidatosIndexComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
+  @ViewChild('candidatoFormModal') candidatoFormModal!: CandidatosCreateComponent;
+  @ViewChild('detailCandidatoModal') detailCandidatoModal!: CandidatosDetailComponent;
   @ViewChild('deleteCandidatoModal') deleteCandidatoModal!: CandidatosDeleteComponent;
 
   dataSource = new MatTableDataSource<Candidatos>();
@@ -87,9 +92,9 @@ export class CandidatosIndexComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // this.eleccionFormModal.eleccionCreada.subscribe(() => {
-    //   this.fetchElecciones();
-    // });
+    this.candidatoFormModal.candidatoCreado.subscribe(() => {
+      this.fetchCandidatos();
+    });
     if (this.paginator) {
       this.dataSource.paginator = this.paginator;
     }
@@ -189,14 +194,16 @@ export class CandidatosIndexComponent implements OnInit, AfterViewInit {
     this.updateTable(currentData);
   }
 
-  redirectDetalle(_id: any) {}
-
   crear() {
-    // this.eleccionFormModal.openModal();
+    this.candidatoFormModal.openModal();
   }
 
-  update(id: any) {
-    // this.eleccionFormModal.openModal(id);
+  update(nombre: any) {
+    this.candidatoFormModal.openModal(nombre);
+  }
+
+  redirectDetalle(nombre: any) {
+    this.detailCandidatoModal.openModal(nombre);
   }
 
   delete(nombre: any) {

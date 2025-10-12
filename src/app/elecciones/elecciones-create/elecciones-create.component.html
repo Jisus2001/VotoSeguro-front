@@ -50,9 +50,9 @@
                     </div>
 
                     <div>
-                        <label for="Nombre" class="block mb-2 text-sm font-medium text-[#344054]">Nombre</label>
-                        <input type="text" id="Nombre" placeholder="Nombre completo" name="Nombre"
-                            formControlName="Nombre"
+                        <label for="Nombre" class="block mb-2 text-sm font-medium text-[#344054]">Nombre de la
+                            elección</label>
+                        <input type="text" id="Nombre" placeholder="Nombre" name="Nombre" formControlName="Nombre"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required />
                         @if (errorHandling('Nombre', 'required')) {
@@ -100,7 +100,7 @@
               userForm.errors?.['dateRangeInvalid'] &&
               userForm.get('FechaFin')?.dirty
             " class="text-red-600 mb-4 p-2 bg-red-100 border border-red-300 rounded">
-                        La Fecha de cierre no puede ser anterior o igual a la Fecha de Inicio.
+                        La Fecha de cierre no puede ser anterior a la Fecha de Inicio.
                     </div>
 
                     <button type="submit" [disabled]="userForm.invalid"
