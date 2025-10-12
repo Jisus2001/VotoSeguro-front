@@ -21,7 +21,7 @@
             <div class="flex items-center justify-center">
                 <div>
                     <h3 class="text-2xl text-center font-semibold text-[#252b36] pb-4">
-                        {{titleForm}} de Sede
+                        {{titleForm}} de Perfil
                     </h3>
                 </div>
             </div>
@@ -31,14 +31,14 @@
                 <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
                     <div>
-                        <label for="name" class="block mb-2 text-sm font-medium text-[#344054]">Nombre</label>
-                        <input type="text" id="Nombre" placeholder="Nombre de la sede" name="Nombre"
-                            formControlName="Nombre"
+                        <label for="name" class="block mb-2 text-sm font-medium text-[#344054]">Descripción</label>
+                        <input type="text" id="Descripcion" placeholder="Nombre del Perfil" name="Descripcion"
+                            formControlName="Descripcion"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required />
-                        @if (errorHandling('Nombre', 'required')) {
+                        @if (errorHandling('Descripcion', 'required')) {
                         <mat-error>
-                            El nombre es <strong>requerido</strong>.
+                            La descripción es <strong>requerida</strong>.
                         </mat-error>
                         }
                     </div>

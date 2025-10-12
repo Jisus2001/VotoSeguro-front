@@ -15,28 +15,25 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { GenericService } from '../../shared/generic.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
-import { EleccionesCreateComponent } from '../elecciones-create/elecciones-create.component';
-import { EleccionesDeleteComponent } from '../elecciones-delete/elecciones-delete.component';
+import { CandidatosDeleteComponent } from '../candidatos-delete/candidatos-delete.component';
 
-export interface Elecciones {
+export interface Candidatos {
   _id: number;
   Nombre: string;
-  FechaInicio: string;
-  FechaFin: string;
-  PerfilId: 1;
-  Sede: {
-    IdSede: number;
-    Nombre: string;
+  Partido: string;
+  Perfil: {
+    IdPerfil: number;
+    Descripcion: string;
   };
 }
 
-export interface Sedes {
-  IdSede: number;
-  Nombre: string;
+export interface Perfil {
+  IdPerfil: number;
+  Descripcion: string;
 }
 
 @Component({
-  selector: 'app-elecciones-index',
+  selector: 'app-candidatos-index',
   standalone: true,
   imports: [
     CommonModule,
@@ -54,28 +51,29 @@ export interface Sedes {
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-    EleccionesCreateComponent,
-    EleccionesDeleteComponent,
+
+    CandidatosDeleteComponent,
   ],
-  templateUrl: './elecciones-index.component.html',
-  styleUrl: './elecciones-index.component.scss',
+  templateUrl: './candidatos-index.component.html',
+  styleUrl: './candidatos-index.component.scss',
 })
-export class EleccionesIndexComponent implements OnInit, AfterViewInit {
+export class CandidatosIndexComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('eleccionFormModal') eleccionFormModal!: EleccionesCreateComponent;
-  @ViewChild('deleteEleccionModal') deleteEleccionModal!: EleccionesDeleteComponent;
 
-  dataSource = new MatTableDataSource<Elecciones>();
-  datos: Elecciones[] = []; // Datos de ejemplo
-  datosSede: Sedes[] = [];
+  @ViewChild('deleteCandidatoModal') deleteCandidatoModal!: CandidatosDeleteComponent;
 
-  displayedColumns = ['Nombre', 'FechaInicio', 'FechaFin', 'Sede', 'accion'];
+  dataSource = new MatTableDataSource<Candidatos>();
+  datos: Candidatos[] = []; // Datos de ejemplo
+  datosPerfil: Perfil[] = [];
+
+  displayedColumns = ['Nombre', 'Partido', 'Perfil', 'accion'];
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   //Filtros;
-  selectedSede: string = 'Todos'; // Inicia por defecto en 'Todos'
+  selectedPerfil: string = 'Todos'; // Inicia por defecto en 'Todos'
   searchNombre: string = '';
+  searchPartido: string = '';
 
   constructor(
     private gService: GenericService,
@@ -84,32 +82,32 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchElecciones();
-    this.fetchSedes();
+    this.fetchCandidatos();
+    this.fetchPerfiles();
   }
 
   ngAfterViewInit(): void {
-    this.eleccionFormModal.eleccionCreada.subscribe(() => {
-      this.fetchElecciones();
-    });
+    // this.eleccionFormModal.eleccionCreada.subscribe(() => {
+    //   this.fetchElecciones();
+    // });
     if (this.paginator) {
       this.dataSource.paginator = this.paginator;
     }
     if (this.sort) {
       this.dataSource.sort = this.sort;
     }
-    this.deleteEleccionModal.eleccionDelete.subscribe((newStatus: number) => {
-      this.fetchElecciones();
+    this.deleteCandidatoModal.candidatoDelete.subscribe((newStatus: number) => {
+      this.fetchCandidatos();
     });
   }
 
-  fetchElecciones() {
+  fetchCandidatos() {
     this.gService
-      .list('elecciones/Listar')
+      .list('candidatos/Listar')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data: any) => {
-          this.datos = data as Elecciones[];
+          this.datos = data as Candidatos[];
           console.log(this.datos);
 
           this.updateTable(this.datos);
@@ -120,14 +118,14 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
       });
   }
 
-  fetchSedes() {
+  fetchPerfiles() {
     this.gService
-      .list('sedes/Listar')
+      .list('perfiles/Listar')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data: any) => {
-          this.datosSede = data as Sedes[];
-          console.log(this.datosSede);
+          this.datosPerfil = data as Perfil[];
+          console.log(this.datosPerfil);
         },
         error: (error: any) => {
           console.error('Error fetching votantes', error);
@@ -135,7 +133,7 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
       });
   }
 
-  updateTable(data: Elecciones[]) {
+  updateTable(data: Candidatos[]) {
     this.dataSource.data = data;
 
     setTimeout(() => {
@@ -155,25 +153,35 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
     let currentData = [...this.datos];
 
     // Verificamos que se haya seleccionado algo y que no sea la opción 'Todos'
-    if (this.selectedSede && this.selectedSede !== 'Todos') {
+    if (this.selectedPerfil && this.selectedPerfil !== 'Todos') {
       // Convertimos el valor seleccionado (que es numérico, pero viene del ngModel como string/number) a number
-      const selectedSedeId = Number(this.selectedSede);
+      const selectedPerfilId = Number(this.selectedPerfil);
 
       currentData = currentData.filter(
-        (data: Elecciones) =>
+        (data: Candidatos) =>
           // Filtramos comparando el IdSede de la elección (data.Sede.IdSede) con el ID seleccionado
           // Usamos el optional chaining operator (?.) en caso de que Sede sea null o undefined
-          data.Sede?.IdSede === selectedSedeId
+          data.Perfil?.IdPerfil === selectedPerfilId
       );
     }
 
-    if (this.searchNombre) {
-      const searchText = String(this.searchNombre).trim();
+    if (this.searchNombre && this.searchNombre.trim()) {
+      const searchText = String(this.searchNombre).trim().toLowerCase();
 
       // Filtra sobre los datos ya filtrados por rol
-      currentData = currentData.filter((data: Elecciones) =>
+      currentData = currentData.filter((data: Candidatos) =>
         // Convierte la Identificación a string para usar includes()
-        String(data.Nombre).includes(searchText)
+        String(data.Nombre).toLowerCase().includes(searchText)
+      );
+    }
+
+    if (this.searchPartido && this.searchPartido.trim()) {
+      const searchText1 = String(this.searchPartido).trim().toLowerCase();
+
+      // Filtra sobre los datos ya filtrados por rol
+      currentData = currentData.filter((data: Candidatos) =>
+        // Convierte la Identificación a string para usar includes()
+        String(data.Partido).toLowerCase().includes(searchText1)
       );
     }
 
@@ -184,19 +192,19 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
   redirectDetalle(_id: any) {}
 
   crear() {
-    this.eleccionFormModal.openModal();
+    // this.eleccionFormModal.openModal();
   }
 
   update(id: any) {
-    this.eleccionFormModal.openModal(id);
+    // this.eleccionFormModal.openModal(id);
   }
 
-  delete(_id: any) {
-    this.deleteEleccionModal.openModal(_id);
+  delete(nombre: any) {
+    this.deleteCandidatoModal.openModal(nombre);
   }
 
-  redirectSedes() {
-    this.router.navigate(['/sedes']);
+  redirectPerfiles() {
+    this.router.navigate(['/perfiles']);
   }
 
   ngOnDestroy() {

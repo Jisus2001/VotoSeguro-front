@@ -15,7 +15,7 @@
 
                 <!-- Filtro por Cédula / Identificación -->
                 <div class="max-w-md mx-auto">
-                    <h1 class="page-title">Listado de Elecciones</h1>
+                    <h1 class="page-title">Listado de Candidatos</h1>
 
                 </div>
 
@@ -23,9 +23,9 @@
 
                 <div class="pr-4">
                     <button class="btncrear" style="background-color: rgb(5, 44, 101); color: #ffffff;"
-                        (click)="redirectSedes()" mat-raised-button>
+                        (click)="redirectPerfiles()" mat-raised-button>
                         <i class="fa-solid fa-circle-info"></i>
-                        Sedes
+                        Perfiles
                     </button>
                 </div>
 
@@ -39,15 +39,15 @@
 
 
                     <div class="max-w-md mx-auto pt-4 pr-5">
-                        <select id="role-filter" name="selectedRole" [(ngModel)]="selectedSede"
+                        <select id="role-filter" name="selectedPerfil" [(ngModel)]="selectedPerfil"
                             (change)="onFilterChange()"
                             class="text-[#667085] font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center border bg-white">
-                            <option selected value="">Todos las sedes</option>
+                            <option selected value="">Todos los perfiles</option>
 
                             <!-- Opciones de roles. Asumo que `roles` tiene `name` y `label` -->
-                            @for (sede of datosSede; track sede.Nombre) {
-                            <option [value]="sede.IdSede">
-                                {{ sede.Nombre }}
+                            @for (perfil of datosPerfil; track perfil.Descripcion) {
+                            <option [value]="perfil.IdPerfil">
+                                {{ perfil.Descripcion }}
                             </option>
                             }
                         </select>
@@ -58,7 +58,19 @@
                     <!-- Filtro por Cédula / Identificación -->
                     <div class="max-w-md mx-auto">
                         <mat-form-field class="relative">
-                            <input matInput type="search" placeholder="Buscar por nombre" [(ngModel)]="searchNombre"
+                            <input matInput type="search" placeholder="Buscar por candidato" [(ngModel)]="searchNombre"
+                                (keyup)="onFilterChange()"
+                                class="block w-full h-11 p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-transparent focus:ring-indigo-600 focus:border-indigo-600">
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+                    </div>
+
+                    <span class="example-spacer"></span>
+
+
+                    <div class="max-w-md mx-auto">
+                        <mat-form-field class="relative">
+                            <input matInput type="search" placeholder="Buscar por partido" [(ngModel)]="searchPartido"
                                 (keyup)="onFilterChange()"
                                 class="block w-full h-11 p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-transparent focus:ring-indigo-600 focus:border-indigo-600">
                             <mat-icon matSuffix>search</mat-icon>
@@ -71,7 +83,7 @@
                         <button class="btncrear hover:bg-[#e6510053]" style="background-color: #e65100; color: #ffffff;"
                             (click)="crear()" mat-raised-button>
                             <i class="fas fa-plus icon-margin-right"></i>
-                            Nuevo Partido
+                            Nuevo Candidato
                         </button>
                     </div>
                 </div>
@@ -84,35 +96,27 @@
                         <ng-container matColumnDef="Nombre">
                             <th scope="col" class=" border text-xs text-black border-white colcolor" mat-header-cell
                                 *matHeaderCellDef mat-sort-header>
-                                Nombre Completo </th>
+                                Nombre </th>
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
                                 *matCellDef="let row">
                                 {{ row.Nombre }} </td>
                         </ng-container>
 
                         <!-- Columna: FechaInicio -->
-                        <ng-container matColumnDef="FechaInicio">
+                        <ng-container matColumnDef="Partido">
                             <th scope="col" class="border text-xs text-black border-white colcolor" mat-header-cell
                                 *matHeaderCellDef mat-sort-header>
-                                Fecha de inicio </th>
+                                Partido </th>
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
-                                *matCellDef="let row"> {{ row.FechaInicio | date: 'dd/MM/yyyy' }} </td>
+                                *matCellDef="let row"> {{row.Partido }}</td>
                         </ng-container>
 
                         <!-- Columna: FechaFin -->
-                        <ng-container matColumnDef="FechaFin">
+                        <ng-container matColumnDef="Perfil">
                             <th scope="col" class="border text-xs text-black border-white colcolor" mat-header-cell
-                                *matHeaderCellDef mat-sort-header> Fecha de cierre </th>
+                                *matHeaderCellDef mat-sort-header> Perfil </th>
                             <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
-                                *matCellDef="let row"> {{ row.FechaFin | date: 'dd/MM/yyyy' }} </td>
-                        </ng-container>
-
-                        <!-- Columna: FechaFin -->
-                        <ng-container matColumnDef="Sede">
-                            <th scope="col" class="border text-xs text-black border-white colcolor" mat-header-cell
-                                *matHeaderCellDef mat-sort-header> Sede </th>
-                            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" mat-cell
-                                *matCellDef="let row"> {{ row.Sede.Nombre }} </td>
+                                *matCellDef="let row"> {{ row.Perfil.Descripcion }} </td>
                         </ng-container>
 
                         <!-- Columna: Acciones -->
@@ -124,16 +128,18 @@
                                 <div class="flex  gap-5">
 
                                     <!-- Botón Detalle -->
-                                    <button mat-icon-button (click)="redirectDetalle(row._id)">
+                                    <button mat-icon-button (click)="redirectDetalle(row.Nombre)">
                                         <mat-icon>visibility</mat-icon>
                                     </button>
 
-                                    <button mat-icon-button (click)="update(row._id)">
+                                    <!-- Botón Editar (No visible si el usuario logueado es Operario intentando editar a un Admin o a sí mismo, según tu lógica original) -->
+                                    <!-- Nota: Ajusté la condición basándome en tu lógica previa, pero usando el campo Perfil -->
+                                    <button mat-icon-button (click)="update(row.Nombre)">
                                         <mat-icon>edit</mat-icon>
                                     </button>
 
                                     <!-- Botón Eliminar / Desactivar -->
-                                    <button mat-icon-button (click)="delete(row._id)" style="color: #b52121">
+                                    <button mat-icon-button (click)="delete(row.Nombre)" style="color: #b52121">
                                         <mat-icon>delete</mat-icon>
                                     </button>
                                 </div>
@@ -163,5 +169,4 @@
     </div>
 </div>
 
-<app-elecciones-create #eleccionFormModal></app-elecciones-create>
-<app-elecciones-delete #deleteEleccionModal></app-elecciones-delete>
+<app-candidatos-delete #deleteCandidatoModal></app-candidatos-delete>

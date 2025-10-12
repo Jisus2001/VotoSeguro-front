@@ -16,7 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-sedes-create',
+  selector: 'app-perfiles-create',
   standalone: true,
   imports: [
     CommonModule,
@@ -27,15 +27,15 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatSelectModule,
   ],
-  templateUrl: './sedes-create.component.html',
-  styleUrl: './sedes-create.component.scss',
+  templateUrl: './perfiles-create.component.html',
+  styleUrl: './perfiles-create.component.scss',
 })
-export class SedesCreateComponent {
+export class PerfilesCreateComponent {
   isVisible = false;
-  IdSede: any; // Usado como Cédula/ID
-  Nombre: any; // Nombre de la persona
+  IdPerfil: any; // Usado como Cédula/ID
+  Descripcion: any; // Nombre de la persona
 
-  @Output() sedeCreada: EventEmitter<void> = new EventEmitter<void>();
+  @Output() perfilCredo: EventEmitter<void> = new EventEmitter<void>();
 
   submitted = false;
 
@@ -59,8 +59,8 @@ export class SedesCreateComponent {
 
   reactiveForm() {
     this.userForm = this.fb.group({
-      IdSede: ['', ''],
-      Nombre: ['', Validators.required],
+      IdPerfil: ['', ''],
+      Descripcion: ['', Validators.required],
     });
   }
 
@@ -87,15 +87,14 @@ export class SedesCreateComponent {
     // this.Identificacion = id;
 
     this.gService
-      .get('sedes/ObtenerSede', id)
+      .get('perfiles/ObtenerPerfil', id)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
         this.user = data;
-          this.userForm.patchValue({
-            IdSede: this.user.IdSede,
-            Nombre: this.user.Nombre,
-          });
-
+        this.userForm.patchValue({
+          IdPerfil: this.user.IdPerfil,
+          Descripcion: this.user.Descripcion,
+        });
       });
   }
 
@@ -105,15 +104,15 @@ export class SedesCreateComponent {
     this.isVisible = false;
     this.isCreate = true;
     this.titleForm = 'Creación';
-    this.sedeCreada.emit();
+    this.perfilCredo.emit();
   }
 
   onSubmit() {
     this.submitted = true;
     const formData = { ...this.userForm.value };
 
-    formData.IdSede = Number(formData.IdSede);
-    formData.Nombre = String(formData.Nombre);
+    formData.IdPerfil = Number(formData.IdPerfil);
+    formData.Descripcion = String(formData.Descripcion);
 
     if (this.userForm.invalid) {
       return;
@@ -121,32 +120,31 @@ export class SedesCreateComponent {
 
     if (this.isCreate) {
       this.gService
-        .create('sedes/Agregar', formData)
+        .create('perfiles/Agregar', formData)
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: any) => {
           this.userData = data;
           this.noti.mensaje(
-            'Sede creada',
-            `La sede ha sido creada con éxito.`,
+            'Prefil Creado',
+            `El perfil ha sido creado con éxito.`,
             TipoMessage.success
           );
-          this.sedeCreada.emit();
+          this.perfilCredo.emit();
           this.closeModal();
         });
     } else {
       this.gService
-        .update(`sedes/Actualizar/${formData.IdSede}`, formData)
+        .update(`perfiles/Actualizar/${formData.IdPerfil}`, formData)
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: any) => {
           this.respuesta = data;
           this.noti.mensaje(
-            'Sede actualizada',
-            `La sede ha sido actualizada con éxito.`,
+            'Perfil Actualizado',
+            `El perfil ha sido actualizado con éxito.`,
             TipoMessage.success
           );
-          this.sedeCreada.emit();
+          this.perfilCredo.emit();
           this.closeModal();
-          this.router.navigate(['/sedes']);
         });
     }
   }
