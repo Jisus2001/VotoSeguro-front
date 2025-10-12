@@ -38,7 +38,7 @@ export class VotantesCreateComponent {
   Telefono: any;
   Correo: any;
   Perfil: any;
-  TypePerfil: any; 
+  TypePerfil: any;
 
   @Output() votanteCreado: EventEmitter<void> = new EventEmitter<void>();
 
@@ -129,21 +129,25 @@ export class VotantesCreateComponent {
   }
 
   openModal(id?: any) {
-    this.userForm.reset();
-    this.isCreate = true;
-    this.titleForm = 'Creación';
-
     this.isVisible = true;
 
     if (id !== undefined && !isNaN(Number(id))) {
+      // Modo Actualización
+      this.isCreate = false;
+      this.titleForm = 'Actualización';
       this.loadData(id);
+    } else {
+      // Modo Creación
+      this.userForm.reset();
+      this.isCreate = true;
+      this.titleForm = 'Creación';
     }
   }
 
   loadData(id: any): void {
-    this.isCreate = false;
-    this.titleForm = 'Actualización';
-    this.Identificacion = id;
+    // this.isCreate = false;
+    // this.titleForm = 'Actualización';
+    // this.Identificacion = id;
 
     this.gService
       .get('personas/ObtenerPersona', id)
@@ -159,9 +163,7 @@ export class VotantesCreateComponent {
           Correo: this.user.Correo,
           Perfil: this.user.Perfil,
         });
-
-        this.TypePerfil = this.userForm.value.Perfil; 
-
+        this.TypePerfil = this.userForm.value.Perfil;
       });
   }
 
@@ -169,14 +171,36 @@ export class VotantesCreateComponent {
     this.submitted = false;
     this.userForm.reset();
     this.isVisible = false;
-
+    this.isCreate = true;
+    this.titleForm = 'Creación';
     this.votanteCreado.emit();
   }
 
-  onSubmit() {
+  // Nuevo método para verificar si el usuario existe (de forma asíncrona)
+  private checkIfUserExists(identificacion: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.gService
+        .get('personas/ObtenerPersona', identificacion)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (data: any) => {
+            // Si la respuesta tiene datos válidos, el usuario existe.
+            resolve(!!data && data.Identificacion);
+          },
+          error: (err) => {
+            // Si hay un error (ej: 404 Not Found), asumimos que el usuario no existe para la creación.
+            // Es importante que el servicio maneje adecuadamente los errores 404 para no romper la app.
+            // Si el error es diferente a 'No encontrado', podrías resolver 'true' para bloquear.
+            resolve(false);
+          },
+        });
+    });
+  }
+
+  async onSubmit() {
     this.submitted = true;
 
-    const formData = this.userForm.value;
+    const formData = { ...this.userForm.value };
 
     formData.Identificacion = String(formData.Identificacion);
     formData.Nombre = String(formData.Nombre);
@@ -184,18 +208,43 @@ export class VotantesCreateComponent {
     formData.Telefono = String(formData.Telefono);
     formData.Correo = String(formData.Correo);
 
-    if(this.isCreate){
-    formData.Perfil = String(this.Perfil);  
+    if (this.isCreate) {
+      formData.Perfil = String(this.Perfil);
     } else {
-      formData.Perfil = String(this.TypePerfil); 
+      formData.Perfil = String(this.TypePerfil);
     }
 
-    if (this.userForm.invalid) {
+    if (!formData.Identificacion) {
+      this.noti.mensaje(
+        'Error',
+        'Debe completar todos los campos requeridos y válidos.',
+        TipoMessage.error
+      );
+
       return;
     }
 
     if (this.isCreate) {
-      if (this.userForm.value) {
+      try {
+        const userExists = await this.checkIfUserExists(formData.Identificacion);
+
+        if (userExists) {
+          this.noti.mensaje(
+            'Advertencia',
+            'Ya existe un votante con la misma identificación.',
+            TipoMessage.warning
+          );
+          // Opcional: limpiar solo el campo de identificación o dejarlo para que el usuario lo edite
+          // this.userForm.get('Identificacion')?.setValue('');
+          // this.userForm.get('Perfil')?.setValue('');
+          // this.userForm.get('Nombre')?.setValue('');
+          // this.userForm.get('Correo')?.setValue('');
+          // this.userForm.get('Contrasenna')?.setValue('');
+          // this.userForm.get('Telefono')?.setValue('');
+          this.closeModal();
+          return;
+        }
+
         this.gService
           .create('personas/Agregar', formData)
           .pipe(takeUntil(this.destroy$))
@@ -207,8 +256,16 @@ export class VotantesCreateComponent {
               TipoMessage.success
             );
             this.votanteCreado.emit();
+            this.closeModal();
             this.router.navigate(['/votantes']);
           });
+      } catch (error) {
+        console.error('Error durante la validación de existencia:', error);
+        this.noti.mensaje(
+          'Error',
+          'Ocurrió un error al verificar la identificación.',
+          TipoMessage.error
+        );
       }
     } else {
       this.gService
@@ -222,16 +279,15 @@ export class VotantesCreateComponent {
             TipoMessage.success
           );
           this.votanteCreado.emit();
+          this.closeModal();
           this.router.navigate(['/votantes']);
         });
     }
-    this.closeModal();
   }
 
   onReset() {
     this.submitted = false;
     this.userForm.reset();
-
   }
 
   // Control de Errores

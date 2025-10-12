@@ -19,7 +19,7 @@ export class NotificacionService {
     this.options = this.toastr.toastrConfig;
     this.options.enableHtml = true;
     this.options.positionClass = 'toast-top-right';
-    this.options.timeOut = 2000; // Tiempo en milisegundos (5 segundos en este caso)
+    this.options.timeOut = 3000; // Tiempo en milisegundos (5 segundos en este caso)
     this.options.closeButton = false;
   }
 

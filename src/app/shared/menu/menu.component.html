@@ -22,6 +22,12 @@
       <p>Elecciones</p>
     </button>
     
+    <button class="menu-item" (click)="onItemSelected({ displayName: 'Candidatos', route: '/candidatos' })"
+      [class.activo]="router.isActive('/candidatos', true)">
+      <img class="icono" src="../../../assets/menu-items/candidato.png" alt="Candidatoss"/>
+      <p>Candidatos</p>
+    </button>
+
     <button class="menu-item" (click)="onItemSelected({ displayName: 'Reportes', route: '/reportes' })"
         [class.activo]="router.isActive('/reportes', true)"
     >

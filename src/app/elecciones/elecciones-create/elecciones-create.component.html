@@ -21,7 +21,7 @@
             <div class="flex items-center justify-center">
                 <div>
                     <h3 class="text-2xl text-center font-semibold text-[#252b36] pb-4">
-                        {{titleForm}} de partido eletroral
+                        {{titleForm}} de Elecciones
                     </h3>
                 </div>
             </div>
@@ -30,8 +30,27 @@
                 <!-- Formulario para crear o actualizar usuario -->
                 <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
+
                     <div>
-                        <label for="name" class="block mb-2 text-sm font-medium text-[#344054]">Nombre</label>
+                        <label for="sedeId" class="block mb-2 text-sm font-medium text-[#344054]">Sedes
+                            Disponibles</label>
+                        <select id="role-filter" formControlName="SedeId" name="selectedSede" [(ngModel)]="selectedSede"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+
+                            <!-- Opciones de roles. Asumo que `roles` tiene `name` y `label` -->
+                            @for (sede of sedeList; track sede.Nombre) {
+                            <option [value]="sede.IdSede">
+                                {{ sede.Nombre }}
+                            </option>
+                            }
+                        </select>
+                        <mat-error *ngIf="errorHandling('SedeId', 'required')">
+                            La sede es obligatoria.
+                        </mat-error>
+                    </div>
+
+                    <div>
+                        <label for="Nombre" class="block mb-2 text-sm font-medium text-[#344054]">Nombre</label>
                         <input type="text" id="Nombre" placeholder="Nombre completo" name="Nombre"
                             formControlName="Nombre"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -41,22 +60,6 @@
                             El nombre es <strong>requerido</strong>.
                         </mat-error>
                         }
-                    </div>
-
-                    <div>
-
-                        <!-- Sede (Selección) -->
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Sede Asociada</mat-label>
-                            <mat-select formControlName="SedeId">
-                                <mat-option *ngFor="let sede of sedeList" [value]="sede.IdSede">
-                                    {{ sede.Nombre }} (ID: {{ sede.IdSede }})
-                                </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="errorHandling('SedeId', 'required')">
-                                La sede es obligatoria.
-                            </mat-error>
-                        </mat-form-field>
                     </div>
 
                     <div>

@@ -8,12 +8,15 @@ import { VotantesIndexComponent } from './votantes/votantes-index/votantes-index
 import { NgModule } from '@angular/core';
 import { EleccionesIndexComponent } from './elecciones/elecciones-index/elecciones-index.component';
 import { SedesIndexComponent } from './sedes/sedes-index/sedes-index.component';
+import { CandidatosIndexComponent } from './candidatos/candidatos-index/candidatos-index.component';
+import { PerfilesIndexComponent } from './perfiles/perfiles-index/perfiles-index.component';
 
 export const routes: Routes = [
   // Página inicial: login
   { path: '', component: LoginComponent },
-  { 
-    path: 'olvidar', component: OlvidarPassComponent 
+  {
+    path: 'olvidar',
+    component: OlvidarPassComponent,
   },
 
   // Dashboard con rutas hijas
@@ -23,39 +26,51 @@ export const routes: Routes = [
   },
 
   {
-    path: 'dashboardvotante', component: DashboardVotanteComponent,
+    path: 'dashboardvotante',
+    component: DashboardVotanteComponent,
   },
 
   //Votantes
-  { 
-    path: 'votantes', component: VotantesIndexComponent,
-    
+  {
+    path: 'votantes',
+    component: VotantesIndexComponent,
   },
 
-    { 
-    path: 'elecciones', component: EleccionesIndexComponent,
-    
+  {
+    path: 'elecciones',
+    component: EleccionesIndexComponent,
   },
 
-      { 
-    path: 'sedes', component: SedesIndexComponent,
-    
+  {
+    path: 'sedes',
+    component: SedesIndexComponent,
+  },
+  {
+    path: 'candidatos',
+    component: CandidatosIndexComponent,
+  },
+    {
+    path: 'perfiles',
+    component: PerfilesIndexComponent,
   },
 
   // Ruta directa al registro (opcional, si quieres permitir acceso fuera del dashboard)
   // { path: 'registro', component: RegistroComponent },
 
   // Redirección por defecto (opcional si usas guards)
-  { 
-    path: 'logout', component: LogoutComponent 
+  {
+    path: 'logout',
+    component: LogoutComponent,
   },
-  { 
-    path: '**', redirectTo: '', pathMatch: 'full'
-   },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

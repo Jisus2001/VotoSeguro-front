@@ -27,6 +27,12 @@ export const navItems: NavItem[] = [
     validation: "isAutenticated",
     route: '/elecciones',
   },
+    {
+    displayName: 'Candidatos',
+    iconPath: '../../../assets/menu-items/candidatos.png',
+    validation: "isAutenticated",
+    route: '/candidatos',
+  },
   {
     displayName: 'Reportes',
     iconPath: '../../../assets/menu-items/reporte-de-negocios.png',
