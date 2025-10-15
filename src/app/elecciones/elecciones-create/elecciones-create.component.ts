@@ -235,7 +235,7 @@ export class EleccionesCreateComponent implements OnInit {
         }
       );
   }
-
+//Time picker https://material.angular.dev/components/timepicker/overview
   onSubmit() {
     this.submitted = true;
 
