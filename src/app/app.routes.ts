@@ -1,7 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { DashboardVotanteComponent } from './dashboard/dashboardVotante/dashboardvotante.component';
 import { OlvidarPassComponent } from './auth/olvidar-pass/olvidar-pass.component';
 import { LogoutComponent } from './shared/logout/logout.component';
 import { VotantesIndexComponent } from './votantes/votantes-index/votantes-index.component';
@@ -10,6 +9,7 @@ import { EleccionesIndexComponent } from './elecciones/elecciones-index/eleccion
 import { SedesIndexComponent } from './sedes/sedes-index/sedes-index.component';
 import { CandidatosIndexComponent } from './candidatos/candidatos-index/candidatos-index.component';
 import { PerfilesIndexComponent } from './perfiles/perfiles-index/perfiles-index.component';
+import { CandidatosEleccionesComponent } from './candidatos/candidatos-elecciones/candidatos-elecciones.component';
 
 export const routes: Routes = [
   // Página inicial: login
@@ -23,11 +23,6 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-  },
-
-  {
-    path: 'dashboardvotante',
-    component: DashboardVotanteComponent,
   },
 
   //Votantes
@@ -52,6 +47,10 @@ export const routes: Routes = [
     {
     path: 'perfiles',
     component: PerfilesIndexComponent,
+  },
+      {
+    path: 'vigentes',
+    component: CandidatosEleccionesComponent,
   },
 
   // Ruta directa al registro (opcional, si quieres permitir acceso fuera del dashboard)

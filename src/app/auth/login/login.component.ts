@@ -85,6 +85,7 @@ export class LoginComponent {
 
             localStorage.setItem('Nombre', res.nombre);
             localStorage.setItem('Rol', res.rol);
+            localStorage.setItem('ID', this.userForm.value.identificacion); 
 
             this.noti.mensaje(
               'Bienvenido a Voto Seguro',
@@ -92,11 +93,7 @@ export class LoginComponent {
               TipoMessage.success
             );
 
-            if (res.rol === 'Administrador') {
-              this.router.navigate(['/dashboard']);
-            } else {
-              this.router.navigate(['/dashboard/dashboardVotante']);
-            }
+           this.router.navigate(['/dashboard']);
           },
           (error) => {
             this.noti.mensaje(

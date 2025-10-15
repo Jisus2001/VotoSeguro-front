@@ -1,0 +1,110 @@
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
+  color: rgb(5, 44, 101);
+}
+
+.dashboard-body {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: auto;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: rgb(5, 44, 101);
+
+  padding: 20px 0;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+.page-title {
+  font-style: italic;
+  font-weight: bold;
+  font-size: 30px;
+  color: rgb(5, 44, 101);
+}
+
+mat-select,
+mat-form-field,
+mat-input {
+  color: rgb(5, 44, 101);
+}
+
+.btncrear {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  padding: 5px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btncrear:hover {
+  background-color: #e6510053;
+}
+
+.filter-container {
+  background-color: aqua;
+}
+
+.icon-margin-right {
+  margin-right: 0.5rem;
+}
+
+//Sirve para la tabla
+table {
+  border-collapse: separate;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: rgb(5, 44, 101);
+}
+
+mat-option,
+mat-select-panel {
+  color: rgb(5, 44, 101);
+  background-color: #ffffff;
+}
+
+.colcolor {
+  background-color: #e5eaf6 !important;
+  text-transform: uppercase;
+    color: #0e2148;
+    font-weight: bold;
+}
+
+td {
+  color: #4e5d7c;
+}
+
+:host {
+      display: block;
+    }
+    .candidate-card {
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    }
+    .candidate-card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+    .text-indigo-600 { color: #052b65; }
+    .text-indigo-700 { color: #052b65; }
+    .text-indigo-500 { color: #052b65; }
+    .text-red-600 { color: #dc2626; }
+    .text-green-600 { color: #16a34a; }
+    .text-blue-600 { color: #2563eb; }
+    .text-gray-500 { color: #474c55; }

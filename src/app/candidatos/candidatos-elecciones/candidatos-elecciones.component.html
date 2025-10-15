@@ -1,0 +1,100 @@
+<div class="dashboard-wrapper">
+    <app-header></app-header>
+    <div class="dashboard-body">
+        <aside class="sidebar">
+            <app-menu></app-menu>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="text-4xl font-bold mb-8 text-center text-[#052c67]">
+                {{ eleccion()!.Nombre }}
+            </h1>
+
+            @if (isLoading()) {
+            <div class="flex justify-center items-center h-64">
+                <mat-spinner color="primary"></mat-spinner>
+                <p class="ml-4 text-lg">Buscando elecciones vigentes...</p>
+            </div>
+            }
+
+            <!-- Mensaje de Error/No Vigente -->
+            @if (!isLoading() && !eleccion()) {
+            <div class="max-w-4xl mx-auto pt-10 pl-10">
+                <h2 class="text-2xl font-bold  m-2">
+                    No hay Elecciones Vigentes
+                </h2>
+                <p class="pt-2">
+                    En este momento no se encuentra ninguna elección activa. Por favor, revisa más tarde.
+                </p>
+            </div>
+            }
+
+            @if(eleccion()) {
+            <mat-card class="max-w-6xl mx-auto rounded-xl shadow-2xl p-6 md:p-10 mb-10 bg-white">
+
+                <!-- Información de la Elección (Parte Superior) -->
+                <div class="mb-8 border-b pb-4">
+                    <p class="text-xl font-medium mb-4">
+                        Puesto a seleccionar: <span class="text-indigo-600 font-extrabold"> {{
+                            eleccion()!.Perfil.Descripcion }}</span>
+                    </p>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
+                            <mat-icon class="text-green-600 mr-2 text-base">schedule</mat-icon>
+                            <span class="font-semibold">Inicio: </span> {{ eleccion()!.FechaInicio }}
+                        </div>
+                        <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
+                            <mat-icon class="text-red-600 mr-2 text-base">event_busy</mat-icon>
+                            <span class="font-semibold">Cierre: </span> {{ eleccion()!.FechaFin }}
+                        </div>
+                        <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
+                            <mat-icon class="text-blue-600 mr-2 text-base">location_on</mat-icon>
+                            <span class="font-semibold">Sede: </span> {{ eleccion()!.Sede.Nombre }}
+                        </div>
+                        <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
+                            <mat-icon class="text-gray-600 mr-2 text-base">people</mat-icon>
+                            <span class="font-semibold">Candidatos: </span> {{ eleccion()!.Candidatos.length }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Candidatos (Parte Inferior - Cuadros) -->
+                <h3 class="text-xl font-semibold text-[#052c67] mb-6">
+                    <i> Seleccione el candidato de su preferencia:
+                    </i>
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
+                    @for (candidato of eleccion()!.Candidatos; track candidato._id) {
+                    <mat-card
+                        class="candidate-card p-6 text-center border-4  rounded-lg hover:border-indigo-400 transition-all duration-300 transform hover:scale-[1.02]"
+                        style="background-color: #6697e10e; border-radius: 15px;">
+
+                        <!-- Nombre del Partido -->
+                        <h4 class="text-xl font-bold text-[#252b36] mb-1 truncate">{{ candidato.Partido }}</h4>
+                        <br>
+
+                        <!-- Nombre del Candidato -->
+                        <h4 class="text-xl font-semibold text-[#252b36] mb-1 truncate">{{ candidato.Nombre }}</h4>
+
+                        <!-- Puesto (redundante, pero útil si se requiere en el futuro) -->
+                        <p class="text-sm text-gray-500 mb-4">{{ candidato.Perfil.Descripcion }}</p>
+                        <!-- Botón de Conoce Más / Modal -->
+                        <button class="w-full rounded-full shadow-md rounded-lg" 
+                                style="background-color: #109464;"
+                                 (click)="redirectVerificacion(eleccion()!._id, candidato._id, candidato.Partido)">
+                            Votar
+                        </button>
+                    </mat-card>
+                    }
+                </div>
+
+            </mat-card>
+            }
+
+        </main>
+    </div>
+</div>
+
+<app-candidatos-votaciones #votacionesCandidatoModal></app-candidatos-votaciones>
