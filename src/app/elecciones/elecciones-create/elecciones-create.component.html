@@ -48,6 +48,24 @@
                             La sede es obligatoria.
                         </mat-error>
                     </div>
+                    
+                    
+                    <div>
+                        <label for="PerfilId" class="block mb-2 text-sm font-medium text-[#344054]">Perfiles</label>
+                        <select id="role-filter" formControlName="PerfilId" name="selectedPerfil"
+                            [(ngModel)]="selectedPerfil"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+
+                            @for (perfil of perfilList; track perfil.Descripcion) {
+                            <option [value]="perfil.IdPerfil">
+                                {{ perfil.Descripcion }}
+                            </option>
+                            }
+                        </select>
+                        <mat-error *ngIf="errorHandling('PerfilId', 'required')">
+                            El tipo de perfil es obligatorio.
+                        </mat-error>
+                    </div>
 
                     <div>
                         <label for="Nombre" class="block mb-2 text-sm font-medium text-[#344054]">Nombre de la

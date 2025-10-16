@@ -24,6 +24,11 @@ interface Sede {
   Nombre: string;
 }
 
+interface Perfil {
+  IdPerfil: number;
+  Descripcion: string;
+}
+
 @Component({
   selector: 'app-elecciones-create',
   standalone: true,
@@ -42,6 +47,7 @@ interface Sede {
 })
 export class EleccionesCreateComponent implements OnInit {
   sedeList: Sede[] = [];
+  perfilList: Perfil[] = [];
   isVisible: any;
   idEleccion: number | null = null;
   Nombre: any;
@@ -71,6 +77,7 @@ export class EleccionesCreateComponent implements OnInit {
   isAdministrador = true;
 
   selectedSede: string = '';
+  selectedPerfil: string = '';
 
   constructor(
     public fb: FormBuilder,
@@ -110,9 +117,9 @@ export class EleccionesCreateComponent implements OnInit {
         idEleccion: [''],
         Nombre: ['', Validators.required],
         SedeId: [null, Validators.required],
+        PerfilId: [null, Validators.required],
         FechaInicio: [null, Validators.required],
         FechaFin: [null, Validators.required],
-        PerfilId: 1,
       },
       {
         validator: EleccionesCreateComponent.dateRangeValidator,
@@ -137,6 +144,7 @@ export class EleccionesCreateComponent implements OnInit {
     }
 
     this.loadSedes();
+    this.loadPerfiles(); 
   }
 
   openModal(id?: any) {
@@ -171,6 +179,25 @@ export class EleccionesCreateComponent implements OnInit {
           this.noti.mensaje(
             'Error de datos',
             'No se pudo cargar la lista de sedes.',
+            TipoMessage.error
+          );
+        },
+      });
+  }
+
+  loadPerfiles() {
+    this.gService
+      .list('perfiles/Listar')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: any) => {
+          this.perfilList = data as Perfil[];
+        },
+        error: (error: any) => {
+          console.error('Error al cargar los perfiles', error);
+          this.noti.mensaje(
+            'Error de datos',
+            'No se pudo cargar la lista de los perfiles.',
             TipoMessage.error
           );
         },
@@ -219,7 +246,7 @@ export class EleccionesCreateComponent implements OnInit {
           this.userForm.patchValue({
             Nombre: this.user.Nombre,
             SedeId: this.user.Sede.IdSede,
-            PerfilId: 1,
+            PerfilId: this.user.Perfil.IdPerfil,
             FechaInicio: fechaInicioInput, // Asignamos el objeto Date
             FechaFin: fechaFinInput,
           });
@@ -235,7 +262,7 @@ export class EleccionesCreateComponent implements OnInit {
         }
       );
   }
-//Time picker https://material.angular.dev/components/timepicker/overview
+  //Time picker https://material.angular.dev/components/timepicker/overview
   onSubmit() {
     this.submitted = true;
 
@@ -263,7 +290,7 @@ export class EleccionesCreateComponent implements OnInit {
     const formData = {
       ...this.userForm.value,
       SedeId: Number(this.userForm.value.SedeId),
-      PerfilId: 1,
+      PerfilId: Number(this.userForm.value.PerfilId),
       FechaInicio: new Date(this.userForm.value.FechaInicio).toISOString(),
       FechaFin: new Date(this.userForm.value.FechaFin).toISOString(),
     };
