@@ -43,12 +43,6 @@
       <img class="icono" src="../../../assets/menu-items/candidato.png" alt="Candidatos" />
       <p>Candidatos</p>
     </button>
-
-    <button class="menu-item" (click)="onItemSelected({ displayName: 'Votaciones', route: '#' })"
-      [class.activo]="router.isActive('#', true)">
-      <img class="icono" src="../../../assets/menu-items/mivoto.png" alt="Votaciones" />
-      <p>Mis votaciones</p>
-    </button>
     }
     <button class="menu-item" (click)="onItemSelected({ displayName: 'Ajustes', route: '/ajustes' })"
       [class.activo]="router.isActive('/ajustes', true)">
