@@ -45,12 +45,6 @@ export const navItems: NavItem[] = [
     validation: "isAutenticated",
     route: '/vigentes',
   },
-        {
-    displayName: 'Votaciones',
-    iconPath: '../../../assets/menu-items/mivoto.png',
-    validation: "isAutenticated",
-    route: '/votaciones',
-  },
   {
     displayName: 'Ajustes',
     iconPath: '../../../assets/menu-items/ajustes.png',

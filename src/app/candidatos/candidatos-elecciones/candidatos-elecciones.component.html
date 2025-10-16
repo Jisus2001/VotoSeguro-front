@@ -6,9 +6,6 @@
         </aside>
 
         <main class="main-content">
-            <h1 class="text-4xl font-bold mb-8 text-center text-[#052c67]">
-                {{ eleccion()!.Nombre }}
-            </h1>
 
             @if (isLoading()) {
             <div class="flex justify-center items-center h-64">
@@ -16,7 +13,6 @@
                 <p class="ml-4 text-lg">Buscando elecciones vigentes...</p>
             </div>
             }
-
             <!-- Mensaje de Error/No Vigente -->
             @if (!isLoading() && !eleccion()) {
             <div class="max-w-4xl mx-auto pt-10 pl-10">
@@ -29,7 +25,34 @@
             </div>
             }
 
+
+            @if (eleccion() && this.votosRealizados().includes(this.eleccion()!._id)) {
+            <div class="flex flex-col items-center justify-center  h-full">
+                <div class="border-l-4 border-green-500 text-green-700 p-8 rounded-lg shadow-2xl max-w-xl mx-auto mt-20 text-center"
+                    role="alert">
+
+                    <!-- Icono centrado -->
+                    <i class="fa fa-check-circle fa-4x pb-4 text-green-800"></i>
+
+                    <h2 class="text-4xl font-extrabold mb-2">
+                        ¡Voto Registrado!
+                    </h2>
+                    <p class="text-xl mt-6">
+                        Estimado usuario, usted ya ha emitido su voto para la presente elección <strong><i>{{
+                                eleccion()!.Nombre}}</i></strong>.
+                    </p>
+                    <p class="text-xl mt-6">
+                     No se permite realizar un segundo voto.
+                    </p>
+                </div>
+            </div>
+
+            } @else {
+
             @if(eleccion()) {
+            <h1 class="text-4xl font-bold mb-8 text-center text-[#052c67]">
+                {{ eleccion()!.Nombre }}
+            </h1>
             <mat-card class="max-w-6xl mx-auto rounded-xl shadow-2xl p-6 md:p-10 mb-10 bg-white">
 
                 <!-- Información de la Elección (Parte Superior) -->
@@ -81,9 +104,8 @@
                         <!-- Puesto (redundante, pero útil si se requiere en el futuro) -->
                         <p class="text-sm text-gray-500 mb-4">{{ candidato.Perfil.Descripcion }}</p>
                         <!-- Botón de Conoce Más / Modal -->
-                        <button class="w-full rounded-full shadow-md rounded-lg" 
-                                style="background-color: #109464;"
-                                 (click)="redirectVerificacion(eleccion()!._id, candidato._id, candidato.Partido)">
+                        <button class="w-full rounded-full shadow-md rounded-lg" style="background-color: #109464;"
+                            (click)="redirectVerificacion(eleccion()!._id, candidato._id, candidato.Partido)">
                             Votar
                         </button>
                     </mat-card>
@@ -92,9 +114,9 @@
 
             </mat-card>
             }
+            }
 
         </main>
     </div>
 </div>
-
 <app-candidatos-votaciones #votacionesCandidatoModal></app-candidatos-votaciones>
