@@ -62,14 +62,14 @@
                             eleccion()!.Perfil.Descripcion }}</span>
                     </p>
 
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                         <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
                             <mat-icon class="text-green-600 mr-2 text-base">schedule</mat-icon>
-                            <span class="font-semibold">Inicio: </span> {{ eleccion()!.FechaInicio }}
+                            <span class="font-semibold">Inicio: </span> {{ formatDate(eleccion()!.FechaInicio) }}
                         </div>
                         <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
                             <mat-icon class="text-red-600 mr-2 text-base">event_busy</mat-icon>
-                            <span class="font-semibold">Cierre: </span> {{ eleccion()!.FechaFin }}
+                            <span class="font-semibold">Cierre: </span> {{formatDate(eleccion()!.FechaFin) }}
                         </div>
                         <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
                             <mat-icon class="text-blue-600 mr-2 text-base">location_on</mat-icon>

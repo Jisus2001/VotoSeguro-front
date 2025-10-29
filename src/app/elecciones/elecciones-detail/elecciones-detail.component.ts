@@ -20,13 +20,15 @@ interface Perfil {
 }
 
 interface Candidato {
-  // Nombre: string; // Nombre de la persona
-  // Partido: string;
-  // PerfilId: number;
-  NombreCandidato: string; 
+  _id: string;
+  Nombre: string;
+  Perfil: Perfil;
+  Partido: string;
+  TotalVotos?: number;
 }
 
 interface EleccionDetail {
+  Activa?: boolean;
   _id: string; // El ID que se obtiene de la URL
   Nombre: string;
   Sede: Sede;
@@ -36,16 +38,23 @@ interface EleccionDetail {
   Candidatos: Candidato[];
 }
 
+interface VotosResultado {
+  totalVotos: number;
+  candidato: {
+    nombre: string;
+    partido: string;
+  };
+}
+
+interface EleccionVotos {
+  mensaje: string;
+  resultados: VotosResultado[];
+}
+
 @Component({
   selector: 'app-elecciones-detail',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, MatIconModule],
   templateUrl: './elecciones-detail.component.html',
   styleUrl: './elecciones-detail.component.scss',
 })
@@ -54,6 +63,10 @@ export class EleccionesDetailComponent {
 
   idEleccion: string | null = null;
   eleccion: EleccionDetail | undefined;
+  votos: VotosResultado[] | undefined;
+  
+  votosResultados: VotosResultado[] | undefined;
+
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -63,11 +76,32 @@ export class EleccionesDetailComponent {
     private noti: NotificacionService
   ) {}
 
-
-  openModal(id: any){
+  openModal(id: any) {
     this.isVisible = true;
-      this.loadEleccionDetail(id);
-      console.log(id)
+    this.loadEleccionDetail(id);
+    this.loadEleccionVotos(id);
+    console.log(id);
+  }
+
+  loadEleccionVotos(id: any) {
+    this.gService
+      .get('votos/PorEleccion', id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: EleccionVotos) => {
+          this.votos = data.resultados;
+          this.mergeCandidatosVotos();
+          console.log('Detalle de Vots cargado:', this.votos);
+        },
+        error: (error: any) => {
+          console.error('Error al cargar datos de la elección:', error);
+          this.noti.mensaje(
+            'Error de carga',
+            'No se pudo obtener la información de la elección.',
+            TipoMessage.error
+          );
+        },
+      });
   }
 
   // Carga los datos de la elección usando el ID obtenido
@@ -78,6 +112,7 @@ export class EleccionesDetailComponent {
       .subscribe({
         next: (data: any) => {
           this.eleccion = data as EleccionDetail;
+          this.mergeCandidatosVotos();
           console.log('Detalle de Elección cargado:', this.eleccion);
         },
         error: (error: any) => {
@@ -87,10 +122,40 @@ export class EleccionesDetailComponent {
             'No se pudo obtener la información de la elección.',
             TipoMessage.error
           );
-          // Opcionalmente, puedes redirigir aquí si el recurso no existe (ej. 404)
-          // this.router.navigate(['/elecciones/lista']); 
-        }
+        },
       });
+  }
+
+  mergeCandidatosVotos() {
+    // Solo procedemos si ambos conjuntos de datos están cargados
+    if (!this.eleccion || !this.eleccion.Candidatos || !this.votos) {
+      console.log('Esperando datos... Eleccion:', !!this.eleccion, 'Votos:', !!this.votos);
+      return;
+    }
+
+    // 1. Crear un mapa para buscar los votos rápidamente (optimización de O(1))
+    const mapaVotos = new Map<string, number>();
+    this.votos.forEach((voto) => {
+      // Creamos una clave única: "Nombre|Partido"
+      const clave = `${voto.candidato.nombre}|${voto.candidato.partido}`;
+      mapaVotos.set(clave, voto.totalVotos);
+    });
+
+    this.eleccion.Candidatos = this.eleccion.Candidatos.map((candidato) => {
+      // Creamos la misma clave para buscar en la elección: "Nombre|Partido"
+      const clave = `${candidato.Nombre}|${candidato.Partido}`;
+
+      // 3. Asignar el valor de totalVotos, o 0 si no se encuentra en el mapa
+      const totalVotos = mapaVotos.get(clave) || 0;
+
+      return {
+        ...candidato,
+        TotalVotos: totalVotos,
+      };
+    });
+
+    console.log('*** Fusión de datos completada ***');
+    console.log('Elección final con votos:', this.eleccion);
   }
 
   // Función de utilidad para formatear la fecha
@@ -99,13 +164,35 @@ export class EleccionesDetailComponent {
     // Crea un objeto Date y lo formatea al locale (por ejemplo, 'es-ES')
     const date = new Date(isoDate);
     // Formato corto, ajusta según necesidad:
-    return date.toLocaleDateString('es-ES', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+    return date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
+  }
+
+  get estadoDinamico(): 'Activa' | 'Inactiva' {
+    if (!this.eleccion || !this.eleccion.FechaFin) {
+      // Manejo de caso si el objeto aún no está cargado o le falta la fecha
+      return 'Inactiva';
+    }
+
+    // 1. Obtener la fecha de cierre de la elección.
+    // El constructor de Date() es lo suficientemente flexible para muchos formatos ISO 8601.
+    const fechaFin = new Date(this.eleccion.FechaFin);
+
+    // 2. Obtener la fecha y hora actuales.
+    const fechaActual = new Date();
+
+    // 3. Comparar las fechas. Si la fecha de fin (en milisegundos) es menor
+    // a la fecha actual, significa que ya pasó.
+    if (fechaFin.getTime() < fechaActual.getTime()) {
+      return 'Inactiva';
+    } else {
+      return 'Activa';
+    }
   }
 
   // Manejo de la destrucción del componente
@@ -114,8 +201,7 @@ export class EleccionesDetailComponent {
     this.destroy$.unsubscribe();
   }
 
-    closeModal() {
+  closeModal() {
     this.isVisible = false;
   }
-
 }

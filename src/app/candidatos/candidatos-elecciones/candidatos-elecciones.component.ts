@@ -116,7 +116,6 @@ export class CandidatosEleccionesComponent implements OnInit, AfterViewInit {
 
           this.isLoading.set(false);
           this.loadVotosRealizados();
-
         },
         error: (err) => {
           console.error('Error al cargar elecciones:', err);
@@ -204,6 +203,21 @@ export class CandidatosEleccionesComponent implements OnInit, AfterViewInit {
       this.showVotoRealizadoOverlay();
       this.showSuccessMessage = true;
     }
+  }
+
+  // Función de utilidad para formatear la fecha
+  formatDate(isoDate: string): string {
+    if (!isoDate) return 'N/A';
+    // Crea un objeto Date y lo formatea al locale (por ejemplo, 'es-ES')
+    const date = new Date(isoDate);
+    // Formato corto, ajusta según necesidad:
+    return date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   }
 
   ngOnDestroy(): void {

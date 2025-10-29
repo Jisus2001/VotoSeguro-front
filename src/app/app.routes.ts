@@ -44,15 +44,14 @@ export const routes: Routes = [
     path: 'candidatos',
     component: CandidatosIndexComponent,
   },
-    {
+  {
     path: 'perfiles',
     component: PerfilesIndexComponent,
   },
-      {
+  {
     path: 'vigentes',
     component: CandidatosEleccionesComponent,
   },
-
   // Ruta directa al registro (opcional, si quieres permitir acceso fuera del dashboard)
   // { path: 'registro', component: RegistroComponent },
 

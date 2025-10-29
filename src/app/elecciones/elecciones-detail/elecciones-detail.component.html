@@ -20,17 +20,17 @@
             </div>
 
             <!-- Modal body -->
-            <div class="p-4 md:p-5">
+            <div>
                 <!-- Contenido de la Elección (anteriormente el cuerpo de la página de detalle) -->
                 <div class="p-6 md:p-8 min-h-screen">
                     <!-- Contenedor principal de la tarjeta -->
-                    <mat-card *ngIf="eleccion" class="mx-auto max-w-4xl rounded-xl shadow-2xl p-6 md:p-10" >
+                    <mat-card *ngIf="eleccion" class="mx-auto max-w-4xl rounded-xl shadow-2xl p-6 md:p-10">
 
                         <!-- Modal header -->
                         <div class="flex items-center justify-center">
                             <div>
                                 <h3 class="text-2xl text-center font-semibold text-[#252b36] pb-8">
-                                    Detalle de Elección: <strong>{{ eleccion.Nombre }}</strong>
+                                    Detalle de la Elección: <strong>{{ eleccion.Nombre }}</strong>
                                 </h3>
                             </div>
                         </div>
@@ -39,8 +39,8 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 text-gray-700">
                             <!-- Nombre de la Elección -->
                             <div>
-                                <p class="font-semibold text-sm uppercase text-gray-500">Nombre de la Elección</p>
-                                <p class="text-lg font-medium">{{ eleccion.Nombre }}</p>
+                                <p class="font-semibold text-sm uppercase text-gray-500">Estado: </p>
+                                <p class="text-lg font-medium">{{ estadoDinamico }}</p>
                             </div>
 
                             <!-- Perfil / Puesto a Elegir -->
@@ -62,7 +62,7 @@
                                 <!-- formatDate es la función del componente TS para dar formato legible -->
                                 <p class="text-lg font-medium text-green-600">{{ formatDate(eleccion.FechaInicio) }}</p>
 
-                                  <p class="font-semibold text-sm uppercase text-gray-500">Fecha de cierre</p>
+                                <p class="font-semibold text-sm uppercase text-gray-500">Fecha de cierre</p>
                                 <p class="text-lg font-medium text-red-600">{{ formatDate(eleccion.FechaFin) }}</p>
                             </div>
 
@@ -72,23 +72,43 @@
                         <div class="my-8 border-t border-gray-200"></div>
 
                         <!-- Sección de Candidatos -->
-                        <h2 class="text-2xl font-semibold text-[#252b36] mb-5 flex items-center">
-                            Candidatos Registrados
+                        <h2 class="text-2xl font-bold text-[#252b36] mb-5 flex items-center">
+                            Candidatos Registrados ( {{ eleccion.Candidatos?.length || 0 }} )
                         </h2>
+
 
                         <!-- Listado de Candidatos -->
                         <div *ngIf="eleccion.Candidatos && eleccion.Candidatos.length > 0; else noCandidatos"
                             class="space-y-4">
 
                             <!-- Iteración sobre la lista de candidatos -->
-                            <mat-card *ngFor="let candidato of eleccion.Candidatos"
-                                class="shadow-md rounded-lg p-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
-                                <div class="flex-1">
-                                    <p class="font-semibold text-lg text-[#252b36]">{{ candidato }}</p>
-                                    <!-- Aquí se mostraría el partido, asumiendo que el objeto Candidato lo tiene -->
-                                    <!-- <p class="text-sm text-gray-500">Partido: </p> -->
+                            @for (candidato of eleccion.Candidatos; track candidato._id) {
+                            <div
+                                class="bg-white p-5 rounded-xl shadow-lg border-l-4 border-indigo-500 flex flex-col md:flex-row justify-between items-start md:items-center transition hover:shadow-xl">
+
+                                <div class="mb-3 md:mb-0">
+                                    <p class="text-xl font-bold">{{ candidato.Nombre }}</p>
+                                    <p class="text-sm font-semibold">{{ candidato.Partido }}</p>
+                                    <p class="text-xs text-gray-500 mt-1">ID: {{ candidato._id }}</p>
                                 </div>
-                            </mat-card>
+
+                                <div class="text-right">
+                                    <span class="text-sm font-medium text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+                                        {{ candidato.Perfil.Descripcion }}
+                                    </span>
+                                </div>
+
+                                <!-- Total de Votos -->
+                    
+                                <div class="flex flex-col items-start md:items-end p-2 rounded-lg" style="background-color: #e6510028; align-items: center;">
+                                    <p class="text-xs font-semibold">Total Votos</p>
+                                    <!-- Se asume la propiedad TotalVotos existe en el objeto candidato -->
+                                    <p class="text-3xl font-extrabold">{{ candidato.TotalVotos || 0 }}
+                                    </p>
+                                </div>
+
+                            </div>
+                            }
 
                         </div>
 
