@@ -41,6 +41,11 @@
                             El nombre es <strong>requerido</strong>.
                         </mat-error>
                         }
+                        @if (errorHandling('Nombre', 'pattern')) {
+                        <mat-error>
+                            El nombre <strong> NO</strong> puede tener caracteres especiales.
+                        </mat-error>
+                        }
                     </div>
 
 

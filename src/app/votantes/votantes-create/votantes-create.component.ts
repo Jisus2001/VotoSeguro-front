@@ -86,7 +86,7 @@ export class VotantesCreateComponent {
           Validators.pattern(this.numRegex),
         ]),
       ],
-      Nombre: ['', Validators.required],
+      Nombre: ['', [Validators.required, Validators.pattern('^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+$')]],
       Contrasenna: [
         '',
         Validators.compose([

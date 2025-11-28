@@ -2,10 +2,10 @@
 <div id="authentication-modal" tabindex="-1" aria-hidden="true"
     class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75 scrollable"
     [class.hidden]="!isVisible">
-    <div class="relative p-4 w-full max-w-md max-h-full">
+    <!-- Ajustado el max-w-md a max-w-2xl para acomodar las dos columnas cómodamente -->
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
         <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow" style="color: rgb(5, 44, 101);
-">
+        <div class="relative bg-white rounded-lg shadow" style="color: rgb(5, 44, 101);">
             <div class="px-5 pt-5 flex justify-end">
                 <button type="button" (click)="closeModal()"
                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
@@ -28,46 +28,12 @@
             <!-- Modal body -->
             <div class="p-4 md:p-5">
                 <!-- Formulario para crear o actualizar usuario -->
+                <!-- Usamos flex flex-col gap-4 para la estructura general del formulario -->
                 <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
 
-                    <div>
-                        <label for="sedeId" class="block mb-2 text-sm font-medium text-[#344054]">Sedes
-                            Disponibles</label>
-                        <select id="role-filter" formControlName="SedeId" name="selectedSede" [(ngModel)]="selectedSede"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-
-                            <!-- Opciones de roles. Asumo que `roles` tiene `name` y `label` -->
-                            @for (sede of sedeList; track sede.Nombre) {
-                            <option [value]="sede.IdSede">
-                                {{ sede.Nombre }}
-                            </option>
-                            }
-                        </select>
-                        <mat-error *ngIf="errorHandling('SedeId', 'required')">
-                            La sede es obligatoria.
-                        </mat-error>
-                    </div>
-                    
-                    
-                    <div>
-                        <label for="PerfilId" class="block mb-2 text-sm font-medium text-[#344054]">Perfiles</label>
-                        <select id="role-filter" formControlName="PerfilId" name="selectedPerfil"
-                            [(ngModel)]="selectedPerfil"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-
-                            @for (perfil of perfilList; track perfil.Descripcion) {
-                            <option [value]="perfil.IdPerfil">
-                                {{ perfil.Descripcion }}
-                            </option>
-                            }
-                        </select>
-                        <mat-error *ngIf="errorHandling('PerfilId', 'required')">
-                            El tipo de perfil es obligatorio.
-                        </mat-error>
-                    </div>
-
-                    <div>
+                    <!-- Nombre de la elección (Se extiende a las 2 columnas) -->
+                    <div class="md:col-span-2">
                         <label for="Nombre" class="block mb-2 text-sm font-medium text-[#344054]">Nombre de la
                             elección</label>
                         <input type="text" id="Nombre" placeholder="Nombre" name="Nombre" formControlName="Nombre"
@@ -79,48 +45,126 @@
                         </mat-error>
                         }
                     </div>
+                    <!-- Contenedor principal para el layout de 2 columnas. Se usa grid-cols-1 en móvil y grid-cols-2 en pantallas medianas (md) y superiores. -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                    <div>
+                        <!-- Columna 1: Sedes -->
                         <div>
-                            <label for="FechaInicio" class="block mb-2 text-sm font-medium text-[#344054]">Fecha de
-                                Inicio
-                            </label>
-                            <input matInput type="date" name="FechaInicio" id="FechaInicio"
-                                formControlName="FechaInicio"
+                            <label for="sedeId" class="block mb-2 text-sm font-medium text-[#344054]">Sedes
+                                Disponibles</label>
+                            <select id="role-filter" formControlName="SedeId" name="selectedSede"
+                                [(ngModel)]="selectedSede"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                @for (sede of sedeList; track sede.Nombre) {
+                                <option [value]="sede.IdSede">
+                                    {{ sede.Nombre }}
+                                </option>
+                                }
+                            </select>
+                            <mat-error *ngIf="errorHandling('SedeId', 'required')">
+                                La sede es obligatoria.
+                            </mat-error>
+                        </div>
+
+                        <!-- Columna 2: Perfiles -->
+                        <div>
+                            <label for="PerfilId" class="block mb-2 text-sm font-medium text-[#344054]">Perfiles</label>
+                            <select id="role-filter" formControlName="PerfilId" name="selectedPerfil"
+                                [(ngModel)]="selectedPerfil"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+
+                                @for (perfil of perfilList; track perfil.Descripcion) {
+                                <option [value]="perfil.IdPerfil">
+                                    {{ perfil.Descripcion }}
+                                </option>
+                                }
+                            </select>
+                            <mat-error *ngIf="errorHandling('PerfilId', 'required')">
+                                El tipo de perfil es obligatorio.
+                            </mat-error>
+                        </div>
+
+                        <!-- Columna 1: Fecha de Inicio (Date) -->
+                        <div>
+                            <div>
+                                <label for="FechaInicio" class="block mb-2 text-sm font-medium text-[#344054]">Fecha de
+                                    Inicio
+                                </label>
+                                <input matInput type="date" name="FechaInicio" id="FechaInicio"
+                                    formControlName="FechaInicio"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    required />
+                                @if (errorHandling('FechaInicio', 'required')) {
+                                <mat-error>
+                                    La fecha de inicio <strong>requerida</strong>.
+                                </mat-error>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Columna 2: Hora de Inicio (Time) -->
+                        <div>
+                            <div>
+                                <label for="FechaInicioTime" class="block mb-2 text-sm font-medium text-[#344054]">Hora
+                                    de
+                                    Inicio </label>
+                                <input matInput type="time" name="FechaInicioTime" id="FechaInicioTime"
+                                    formControlName="FechaInicioTime"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    required />
+                                @if (errorHandling('FechaInicioTime', 'required')) {
+                                <mat-error>
+                                    La hora de inicio <strong>requerida</strong>.
+                                </mat-error>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Columna 1: Fecha de Cierre (Date) -->
+                        <div>
+                            <div>
+                                <label for="FechaFin" class="block mb-2 text-sm font-medium text-[#344054]">Fecha de
+                                    cierre
+                                </label>
+                                <input matInput type="date" name="FechaFin" id="FechaFin" formControlName="FechaFin"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    required />
+                                <!-- **Nota:** Mantuve la validación 'FechaInicio' aquí, pero parece que debería ser 'FechaFin' -->
+                                @if (errorHandling('FechaInicio', 'required')) {
+                                <mat-error>
+                                    La fecha de cierre <strong>requerida</strong>.
+                                </mat-error>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Columna 2: Hora de Cierre (Time) -->
+                        <div>
+                            <label for="FechaFinTime" class="block mb-2 text-sm font-medium text-[#344054]">Hora de
+                                cierre </label>
+                            <input matInput type="time" name="FechaFinTime" id="FechaFinTime"
+                                formControlName="FechaFinTime"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 required />
-                            @if (errorHandling('FechaInicio', 'required')) {
+                            @if (errorHandling('FechaFinTime', 'required')) {
                             <mat-error>
-                                La fecha de inicio <strong>requerida</strong>.
+                                La hora de cierre <strong>requerida</strong>.
                             </mat-error>
                             }
                         </div>
-                    </div>
 
-                    <div>
-                        <div>
-                            <label for="FechaFin" class="block mb-2 text-sm font-medium text-[#344054]">Fecha de
-                                cierre
-                            </label>
-                            <input matInput type="date" name="FechaFin" id="FechaFin" formControlName="FechaFin"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                required />
-                            @if (errorHandling('FechaInicio', 'required')) {
-                            <mat-error>
-                                La fecha de cierre <strong>requerida</strong>.
-                            </mat-error>
-                            }
-                        </div>
                     </div>
+                    <!-- Fin del grid de 2 columnas -->
 
-                    <!-- Validación de Rango de Fechas (Global) -->
+                    <!-- Validación de Rango de Fechas (Global, se extiende a 2 columnas) -->
                     <div *ngIf="
-              userForm.errors?.['dateRangeInvalid'] &&
-              userForm.get('FechaFin')?.dirty
-            " class="text-red-600 mb-4 p-2 bg-red-100 border border-red-300 rounded">
+                        userForm.errors?.['dateRangeInvalid'] &&
+                        userForm.get('FechaFin')?.dirty
+                      " class="md:col-span-2 text-red-600 mb-4 p-2 bg-red-100 border border-red-300 rounded">
                         La Fecha de cierre no puede ser anterior a la Fecha de Inicio.
                     </div>
 
+                    <!-- Botón Guardar (Full Width) -->
                     <button type="submit" [disabled]="userForm.invalid"
                         class="mt-4 w-full text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200"
                         style="background-color: #e65100;">

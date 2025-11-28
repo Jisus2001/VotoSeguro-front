@@ -88,38 +88,59 @@ export class EleccionesCreateComponent implements OnInit {
     this.reactiveForm();
   }
 
-  static dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const startDate = control.get('FechaInicio')?.value;
-    const endDate = control.get('FechaFin')?.value;
+  // Helper para combinar fecha y hora en un objeto Date
+  private static combineDateTime(dateStr: string | null, timeStr: string | null): Date | null {
+    if (!dateStr || !timeStr) {
+      return null;
+    }
+    // Combina YYYY-MM-DD y HH:mm:ss (los segundos se asumen 00)
+    // El formato 'YYYY-MM-DDTHH:mm:00' crea la fecha en la zona horaria local.
+    const localDateTimeStr = `${dateStr}T${timeStr}:00`;
 
-    if (!startDate || !endDate) {
+    // Crear el objeto Date local. Es importante NO usar 'Z' aquí.
+    const date = new Date(localDateTimeStr);
+
+    // Si quieres que el backend lo interprete como hora UTC/Z, el backend debería manejar la conversión.
+    // Sin embargo, para la comparación local, usamos la fecha local.
+
+    // Comprobación simple de validez
+    if (isNaN(date.getTime())) {
+      return null;
+    }
+    return date;
+  }
+
+  static dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const startDateStr = control.get('FechaInicio')?.value;
+    const startTimeStr = control.get('FechaInicioTime')?.value;
+    const endDateStr = control.get('FechaFin')?.value;
+    const endTimeStr = control.get('FechaFinTime')?.value;
+
+    const start = EleccionesCreateComponent.combineDateTime(startDateStr, startTimeStr);
+    const end = EleccionesCreateComponent.combineDateTime(endDateStr, endTimeStr);
+
+    if (!start || !end) {
       return null;
     }
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    // Compara solo las fechas, ignorando la hora
-    start.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-
-    // Rechaza si FechaFin es menor a la FechaInicio
+    // Rechaza si FechaFin + HoraFin es menor a FechaInicio + HoraInicio
     if (end < start) {
       return { dateRangeInvalid: true };
     }
 
     return null;
   };
-
   reactiveForm() {
     this.userForm = this.fb.group(
       {
         idEleccion: [''],
-        Nombre: ['', Validators.required],
+        Nombre: [null, Validators.required],
         SedeId: [null, Validators.required],
         PerfilId: [null, Validators.required],
         FechaInicio: [null, Validators.required],
+        FechaInicioTime: [null, Validators.required],
         FechaFin: [null, Validators.required],
+        FechaFinTime: [null, Validators.required],
       },
       {
         validator: EleccionesCreateComponent.dateRangeValidator,
@@ -144,7 +165,7 @@ export class EleccionesCreateComponent implements OnInit {
     }
 
     this.loadSedes();
-    this.loadPerfiles(); 
+    this.loadPerfiles();
   }
 
   openModal(id?: any) {
@@ -211,22 +232,46 @@ export class EleccionesCreateComponent implements OnInit {
     this.idEleccion = null;
   }
 
-  private formatISOToInputDate(isoString: string | null): string | null {
+  // Función para extraer la fecha (YYYY-MM-DD) y hora (HH:mm) desde un ISO String
+  private extractDateTime(isoString: string | null): { date: string | null; time: string | null } {
     if (!isoString) {
-      return null;
+      return { date: null, time: null };
     }
-    // Convertimos la cadena ISO a un objeto Date
+
+    // Crea un objeto Date. Esto asume que el backend devuelve la fecha/hora en UTC
+    // y Date la convierte a la hora local del navegador.
     const date = new Date(isoString);
 
-    // Obtenemos los componentes de la fecha
+    // Formato de la fecha (YYYY-MM-DD)
     const year = date.getFullYear();
-    // getMonth() es base 0, por eso sumamos 1
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
+    const datePart = `${year}-${month}-${day}`;
 
-    // Juntamos en el formato 'YYYY-MM-DD'
-    return `${year}-${month}-${day}`;
+    // Formato de la hora (HH:mm)
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const timePart = `${hours}:${minutes}`;
+
+    return { date: datePart, time: timePart };
   }
+
+  // private formatISOToInputDate(isoString: string | null): string | null {
+  //   if (!isoString) {
+  //     return null;
+  //   }
+  //   Convertimos la cadena ISO a un objeto Date
+  //   const date = new Date(isoString);
+
+  //   Obtenemos los componentes de la fecha
+  //   const year = date.getFullYear();
+  //   getMonth() es base 0, por eso sumamos 1
+  //   const month = String(date.getMonth() + 1).padStart(2, '0');
+  //   const day = String(date.getDate()).padStart(2, '0');
+
+  //   Juntamos en el formato 'YYYY-MM-DD'
+  //   return `${year}-${month}-${day}`;
+  // }
 
   loadData(id: any) {
     this.isCreate = false;
@@ -240,15 +285,26 @@ export class EleccionesCreateComponent implements OnInit {
         (data: any) => {
           this.user = data;
 
-          const fechaInicioInput = this.formatISOToInputDate(this.user.FechaInicio);
-          const fechaFinInput = this.formatISOToInputDate(this.user.FechaFin);
+          // const fechaInicioInput = this.formatISOToInputDate(this.user.FechaInicio);
+          // const fechaFinInput = this.formatISOToInputDate(this.user.FechaFin);
+
+          const { date: fechaInicioInput, time: horaInicioInput } = this.extractDateTime(
+            this.user.FechaInicio
+          );
+          const { date: fechaFinInput, time: horaFinInput } = this.extractDateTime(
+            this.user.FechaFin
+          );
 
           this.userForm.patchValue({
             Nombre: this.user.Nombre,
             SedeId: this.user.Sede.IdSede,
             PerfilId: this.user.Perfil.IdPerfil,
-            FechaInicio: fechaInicioInput, // Asignamos el objeto Date
+            // FechaInicio: fechaInicioInput, // Asignamos el objeto Date
+            // FechaFin: fechaFinInput,
+            FechaInicio: fechaInicioInput,
+            FechaInicioTime: horaInicioInput,
             FechaFin: fechaFinInput,
+            FechaFinTime: horaFinInput,
           });
           console.log(this.userForm.value);
         },
@@ -262,7 +318,7 @@ export class EleccionesCreateComponent implements OnInit {
         }
       );
   }
-  //Time picker https://material.angular.dev/components/timepicker/overview
+
   onSubmit() {
     this.submitted = true;
 
@@ -286,13 +342,25 @@ export class EleccionesCreateComponent implements OnInit {
       return;
     }
 
+    const fechaInicioLocal = EleccionesCreateComponent.combineDateTime(
+      this.userForm.value.FechaInicio,
+      this.userForm.value.FechaInicioTime
+    );
+    const fechaFinLocal = EleccionesCreateComponent.combineDateTime(
+      this.userForm.value.FechaFin,
+      this.userForm.value.FechaFinTime
+    );
+
     // Formato de fechas al estándar ISO 8601 que el backend espera
     const formData = {
       ...this.userForm.value,
       SedeId: Number(this.userForm.value.SedeId),
       PerfilId: Number(this.userForm.value.PerfilId),
-      FechaInicio: new Date(this.userForm.value.FechaInicio).toISOString(),
-      FechaFin: new Date(this.userForm.value.FechaFin).toISOString(),
+      // FechaInicio: new Date(this.userForm.value.FechaInicio).toISOString(),
+      // FechaFin: new Date(this.userForm.value.FechaFin).toISOString(),
+
+      FechaInicio: fechaInicioLocal ? fechaInicioLocal.toISOString() : null,
+      FechaFin: fechaFinLocal ? fechaFinLocal.toISOString() : null,
     };
 
     console.log(formData);
@@ -306,8 +374,8 @@ export class EleccionesCreateComponent implements OnInit {
           .subscribe({
             next: () => {
               this.noti.mensaje(
-                'Partido Electoral Creada',
-                `El partido ${formData.Nombre} ha sido creado con éxito.`,
+                'Elección Creada',
+                `La elección: ${formData.Nombre} ha sido creado con éxito.`,
                 TipoMessage.success
               );
 
@@ -335,8 +403,8 @@ export class EleccionesCreateComponent implements OnInit {
         .subscribe((data: any) => {
           this.respuesta = data;
           this.noti.mensaje(
-            'Elección ° Actualizada',
-            `La elección ha sido actualizado con éxito.`,
+            'Elección Actualizada',
+            `La elección ha sido actualizada con éxito.`,
             TipoMessage.success
           );
           this.eleccionCreada.emit();

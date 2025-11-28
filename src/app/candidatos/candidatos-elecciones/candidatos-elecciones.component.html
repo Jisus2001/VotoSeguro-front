@@ -65,19 +65,19 @@
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                         <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
                             <mat-icon class="text-green-600 mr-2 text-base">schedule</mat-icon>
-                            <span class="font-semibold">Inicio: </span> {{ formatDate(eleccion()!.FechaInicio) }}
+                            <span class="font-semibold">Inicio:&nbsp;</span> {{ formatDate(eleccion()!.FechaInicio) }}
                         </div>
                         <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
                             <mat-icon class="text-red-600 mr-2 text-base">event_busy</mat-icon>
-                            <span class="font-semibold">Cierre: </span> {{formatDate(eleccion()!.FechaFin) }}
+                            <span class="font-semibold">Cierre:&nbsp;</span> {{formatDate(eleccion()!.FechaFin) }}
                         </div>
                         <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
                             <mat-icon class="text-blue-600 mr-2 text-base">location_on</mat-icon>
-                            <span class="font-semibold">Sede: </span> {{ eleccion()!.Sede.Nombre }}
+                            <span class="font-semibold">Sede:&nbsp;</span> {{ eleccion()!.Sede.Nombre }}
                         </div>
                         <div class="p-2 border rounded-lg bg-gray-50 flex items-center justify-center">
                             <mat-icon class="text-gray-600 mr-2 text-base">people</mat-icon>
-                            <span class="font-semibold">Candidatos: </span> {{ eleccion()!.Candidatos.length }}
+                            <span class="font-semibold">Candidatos:&nbsp;</span> {{ eleccion()!.Candidatos.length }}
                         </div>
                     </div>
                 </div>

@@ -44,13 +44,8 @@
       <p>Candidatos</p>
     </button>
     }
-    <button class="menu-item" (click)="onItemSelected({ displayName: 'Ajustes', route: '/ajustes' })"
-      [class.activo]="router.isActive('/ajustes', true)">
-      <img class="icono" src="../../../assets/menu-items/ajustes.png" alt="Ajustes" />
-      <p>Ajustes</p>
-    </button>
-
-    <button class="menu-item" (click)="onItemSelected({ displayName: 'Cerrar Sesión', route: '/login' })"
+    
+    <button class="menu-item" (click)="onItemSelected({ displayName: 'Cerrar Sesión', route: '/logout' })"
       [class.activo]="router.isActive('/logout', true)">
       <img class="icono" src="../../../assets/menu-items/cerrar-sesion.png" alt="Cerrar Sesión" />
       <p>Cerrar Sesión</p>

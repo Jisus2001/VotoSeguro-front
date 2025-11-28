@@ -10,6 +10,7 @@ import { SedesIndexComponent } from './sedes/sedes-index/sedes-index.component';
 import { CandidatosIndexComponent } from './candidatos/candidatos-index/candidatos-index.component';
 import { PerfilesIndexComponent } from './perfiles/perfiles-index/perfiles-index.component';
 import { CandidatosEleccionesComponent } from './candidatos/candidatos-elecciones/candidatos-elecciones.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 export const routes: Routes = [
   // Página inicial: login
@@ -60,10 +61,11 @@ export const routes: Routes = [
     path: 'logout',
     component: LogoutComponent,
   },
-  {
-    path: '**',
-    redirectTo: '',
-    pathMatch: 'full',
+  { path: 'notfound', 
+    component: NotFoundComponent 
+  },
+  { path: '**', 
+    redirectTo: '/notfound' 
   },
 ];
 

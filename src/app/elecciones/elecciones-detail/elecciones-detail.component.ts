@@ -80,7 +80,6 @@ export class EleccionesDetailComponent {
     this.isVisible = true;
     this.loadEleccionDetail(id);
     this.loadEleccionVotos(id);
-    console.log(id);
   }
 
   loadEleccionVotos(id: any) {
@@ -91,7 +90,6 @@ export class EleccionesDetailComponent {
         next: (data: EleccionVotos) => {
           this.votos = data.resultados;
           this.mergeCandidatosVotos();
-          console.log('Detalle de Vots cargado:', this.votos);
         },
         error: (error: any) => {
           console.error('Error al cargar datos de la elección:', error);
@@ -113,7 +111,6 @@ export class EleccionesDetailComponent {
         next: (data: any) => {
           this.eleccion = data as EleccionDetail;
           this.mergeCandidatosVotos();
-          console.log('Detalle de Elección cargado:', this.eleccion);
         },
         error: (error: any) => {
           console.error('Error al cargar datos de la elección:', error);
@@ -129,7 +126,6 @@ export class EleccionesDetailComponent {
   mergeCandidatosVotos() {
     // Solo procedemos si ambos conjuntos de datos están cargados
     if (!this.eleccion || !this.eleccion.Candidatos || !this.votos) {
-      console.log('Esperando datos... Eleccion:', !!this.eleccion, 'Votos:', !!this.votos);
       return;
     }
 
@@ -153,9 +149,6 @@ export class EleccionesDetailComponent {
         TotalVotos: totalVotos,
       };
     });
-
-    console.log('*** Fusión de datos completada ***');
-    console.log('Elección final con votos:', this.eleccion);
   }
 
   // Función de utilidad para formatear la fecha

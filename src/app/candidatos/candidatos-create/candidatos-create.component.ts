@@ -100,7 +100,7 @@ export class CandidatosCreateComponent implements OnInit {
   reactiveForm() {
     this.userForm = this.fb.group({
       idCandidato: ['', ''],
-      Nombre: ['', Validators.required],
+Nombre: ['', [Validators.required, Validators.pattern('^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+$')]],
       Partido: [null, Validators.required],
       PerfilId: [null, Validators.required],
       EleccionId: [null, Validators.required],
@@ -122,6 +122,8 @@ export class CandidatosCreateComponent implements OnInit {
   }
 
   // --- Manejo de Cambios en Dropdowns ---
+
+  
 
   onElectionChange(): void {
     this.serverError = null; // Limpiar errores del servidor

@@ -69,11 +69,17 @@ export class VotantesIndexComponent implements OnInit, AfterViewInit {
   //Filtros;
   selectedRole: string = 'Todos'; // Inicia por defecto en 'Todos'
   searchCedula: string = ''; // Filtro por cédula
+  selectedEstado: string = 'Todos'; // Filtro por estado
 
   roles = [
     { name: 'Todos', label: 'Todos los roles' },
     { name: 'Administrador', label: 'Administradores' },
     { name: 'Votante', label: 'Votantes' },
+  ];
+
+   estados = [
+    { name: 'Todos', label: 'Todos los votantes' },
+    { name: 'Bloqueado', label: 'Bloqueado' },
   ];
 
   constructor(
@@ -112,6 +118,8 @@ export class VotantesIndexComponent implements OnInit, AfterViewInit {
           this.datos = data as Persona[];
 
           this.updateTable(this.datos);
+
+          console.log('Votantes fetched successfully', this.datos);
         },
         error: (error: any) => {
           console.error('Error fetching votantes', error);
@@ -131,6 +139,14 @@ export class VotantesIndexComponent implements OnInit, AfterViewInit {
           // Compara el perfil del dato con el rol seleccionado, ambos en minúsculas
           (data.Perfil || '').toLowerCase() === selectedRoleLower
       );
+    }
+
+    if (this.selectedEstado && this.selectedEstado !== 'Todos') {
+      if (this.selectedEstado === 'Bloqueado') {
+        currentData = currentData.filter(
+          (data: any) => data.BloqueadoHasta !== null
+        );
+      }
     }
 
     // 2. Filtrar por Cédula/Identificación

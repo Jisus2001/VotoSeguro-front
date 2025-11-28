@@ -2,10 +2,10 @@
 <div id="authentication-modal" tabindex="-1" aria-hidden="true"
     class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75 scrollable"
     [class.hidden]="!isVisible">
-    <div class="relative p-4 w-full max-w-md max-h-full">
+    <!-- Se aumentó el ancho máximo a max-w-2xl para acomodar mejor el formulario de dos columnas -->
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
         <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow" style="color: rgb(5, 44, 101);
-">
+        <div class="relative bg-white rounded-lg shadow" style="color: rgb(5, 44, 101);">
             <div class="px-5 pt-5 flex justify-end">
                 <button type="button" (click)="closeModal()"
                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
@@ -30,6 +30,7 @@
                 <!-- Formulario para crear o actualizar usuario -->
                 <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
+                    <!-- SECCIÓN PERFIL (Siempre full-width) -->
                     @if(isCreate){
                     <div>
                         <label for="estados" class="block mb-2 text-sm font-medium text-[#344054]">Tipo de perfil
@@ -58,129 +59,149 @@
                         <p class="text-xs text-gray-500 mt-1">No se puede actualizar el tipo de perfil</p>
                     </div>
                     }
+                    <!-- FIN SECCIÓN PERFIL -->
 
-                    <div>
-                        <label for="Identificacion"
-                            class="block mb-2 text-sm font-medium text-[#344054]">Identificación</label>
-                        <input type="text" id="Identificacion" name="Identificacion"
-                            placeholder="123456789 (Nacional) ó 123456789012 (DIMEX)" formControlName="Identificacion"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
-                        @if (errorHandling('Identificacion', 'required')) {
-                        <mat-error>
-                            La identificación es <strong>requerida</strong>.
-                        </mat-error>
-                        }
-                        @if (errorHandling('Identificacion', 'pattern')) {
-                        <mat-error>
-                            La identificación solo deberá tener digitos <strong>numéricos</strong>.
-                        </mat-error>
-                        }
-                        @if (errorHandling('Identificacion', 'minlength')) {
-                        <mat-error>
-                            La identificación deberá tener digitos al menos
-                            <strong>9 digitos</strong>.
-                        </mat-error>
-                        }
-                        @if (errorHandling('Identificacion', 'maxlength')) {
-                        <mat-error>
-                            La identificación deberá tener digitos hasta <strong>12 digitos</strong>.
-                        </mat-error>
-                        }
-                    </div>
+                    <!-- INICIO DE LA REJILLA DE DOS COLUMNAS -->
+                    <!-- Se aplica grid grid-cols-1 para móvil y md:grid-cols-2 para pantallas medianas o grandes -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-
-                    <div>
-                        <label for="Nombre" class="block mb-2 text-sm font-medium text-[#344054]">Nombre</label>
-                        <input type="text" id="Nombre" placeholder="Nombre completo" name="Nombre"
-                            formControlName="Nombre"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
-                        @if (errorHandling('Nombre', 'required')) {
-                        <mat-error>
-                            El nombre es <strong>requerido</strong>.
-                        </mat-error>
-                        }
-                    </div>
-
-                    <div>
+                        <!-- Identificacion -->
                         <div>
-                            <label for="Correo" class="block mb-2 text-sm font-medium text-[#344054]">Correo
-                            </label>
-                            <input type="correo" name="Correo" id="Correo" placeholder="ejemplo@gmail.com"
-                                formControlName="Correo"
+                            <label for="Identificacion"
+                                class="block mb-2 text-sm font-medium text-[#344054]">Identificación</label>
+                            <input type="text" id="Identificacion" name="Identificacion"
+                                placeholder="123456789 (Nacional) ó 123456789012 (DIMEX)" formControlName="Identificacion"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 required />
-                            @if (errorHandling('Correo', 'required')) {
+                            @if (errorHandling('Identificacion', 'required')) {
                             <mat-error>
-                                El correo es <strong>requerido</strong>.
+                                La identificación es <strong>requerida</strong>.
                             </mat-error>
                             }
-                            @if (errorHandling('Correo', 'email')) {
+                            @if (errorHandling('Identificacion', 'pattern')) {
                             <mat-error>
-                                El correo debe tener formato de correo. Ejemplo
-                                <strong>abc126@correo.com</strong>.
+                                La identificación solo deberá tener digitos <strong>numéricos</strong>.
+                            </mat-error>
+                            }
+                            @if (errorHandling('Identificacion', 'minlength')) {
+                            <mat-error>
+                                La identificación deberá tener digitos al menos
+                                <strong>9 digitos</strong>.
+                            </mat-error>
+                            }
+                            @if (errorHandling('Identificacion', 'maxlength')) {
+                            <mat-error>
+                                La identificación deberá tener digitos hasta <strong>12 digitos</strong>.
                             </mat-error>
                             }
                         </div>
-                    </div>
 
-                    <div>
-                        <label for="Contrasenna"
-                            class="block mb-2 text-sm font-medium text-[#344054]">Contraseña</label>
-                        <input type="password" id="Contrasenna" placeholder="**********" name="Contrasenna"
-                            formControlName="Contrasenna"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
-                        @if (errorHandling('Contrasenna', 'required')) {
-                        <mat-error>
-                            La contraseña es <strong>requerida</strong>.
-                        </mat-error>
-                        }
-                        @if (errorHandling('Contrasenna', 'minlength')) {
-                        <mat-error>
-                            La contraseña deberá tener digitos al menos
-                            <strong>8 digitos</strong>.
-                        </mat-error>
-                        }
-                        @if(errorHandling('Contrasenna', 'maxlength')) {
-                        <mat-error>
-                            La contraseña deberá tener digitos hasta
-                            <strong>20 digitos</strong>.
-                        </mat-error>
-                        }
-                    </div>
+                        <!-- Nombre -->
+                        <div>
+                            <label for="Nombre" class="block mb-2 text-sm font-medium text-[#344054]">Nombre</label>
+                            <input type="text" id="Nombre" placeholder="Nombre completo" name="Nombre"
+                                formControlName="Nombre"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                required />
+                            @if (errorHandling('Nombre', 'required')) {
+                            <mat-error>
+                                El nombre es <strong>requerido</strong>.
+                            </mat-error>
+                            }
+                            @if (errorHandling('Nombre', 'pattern')) {
+                            <mat-error>
+                                El nombre <strong> NO</strong> puede tener caracteres especiales.
+                            </mat-error>
+                            }
+                        </div>
 
-                    <div>
-                        <label for="Telefono" class="block mb-2 text-sm font-medium text-[#344054]">Teléfono</label>
-                        <input type="text" id="Telefono" placeholder="62503829" name="Telefono"
-                            formControlName="Telefono"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
-                        @if (errorHandling('Telefono', 'required')) {
-                        <mat-error>
-                            El teléfono es <strong>requerido</strong>.
-                        </mat-error>
-                        }
-                        @if (errorHandling('Telefono', 'pattern')) {
-                        <mat-error>
-                            El teléfono solo deberá tener digitos <strong>numéricos</strong>.
-                        </mat-error>
-                        }
-                        @if(errorHandling('Telefono', 'minlength')) {
+                        <!-- Correo -->
+                        <div>
+                            <div>
+                                <label for="Correo" class="block mb-2 text-sm font-medium text-[#344054]">Correo
+                                </label>
+                                <input type="correo" name="Correo" id="Correo" placeholder="ejemplo@gmail.com"
+                                    formControlName="Correo"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    required />
+                                @if (errorHandling('Correo', 'required')) {
+                                <mat-error>
+                                    El correo es <strong>requerido</strong>.
+                                </mat-error>
+                                }
+                                @if (errorHandling('Correo', 'email')) {
+                                <mat-error>
+                                    El correo debe tener formato de correo. Ejemplo
+                                    <strong>abc126@correo.com</strong>.
+                                </mat-error>
+                                }
+                            </div>
+                        </div>
 
-                        <mat-error>
-                            El teléfono deberá tener digitos al menos
-                            <strong>8 digitos</strong>.
-                        </mat-error>
-                        }
-                        @if(errorHandling('Telefono', 'maxlength')) {
-                        <mat-error>
-                            El teléfono deberá tener digitos hasta
-                            <strong>12 digitos</strong>.
-                        </mat-error>
-                        }
+                        <!-- Contrasenna -->
+                        <div>
+                            <label for="Contrasenna"
+                                class="block mb-2 text-sm font-medium text-[#344054]">Contraseña</label>
+                            <input type="password" id="Contrasenna" placeholder="**********" name="Contrasenna"
+                                formControlName="Contrasenna"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                required />
+                            @if (errorHandling('Contrasenna', 'required')) {
+                            <mat-error>
+                                La contraseña es <strong>requerida</strong>.
+                            </mat-error>
+                            }
+                            @if (errorHandling('Contrasenna', 'minlength')) {
+                            <mat-error>
+                                La contraseña deberá tener digitos al menos
+                                <strong>8 digitos</strong>.
+                            </mat-error>
+                            }
+                            @if(errorHandling('Contrasenna', 'maxlength')) {
+                            <mat-error>
+                                La contraseña deberá tener digitos hasta
+                                <strong>20 digitos</strong>.
+                            </mat-error>
+                            }
+                        </div>
+
+                        <!-- Telefono -->
+                        <div>
+                            <label for="Telefono" class="block mb-2 text-sm font-medium text-[#344054]">Teléfono</label>
+                            <input type="text" id="Telefono" placeholder="62503829" name="Telefono"
+                                formControlName="Telefono"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                required />
+                            @if (errorHandling('Telefono', 'required')) {
+                            <mat-error>
+                                El teléfono es <strong>requerido</strong>.
+                            </mat-error>
+                            }
+                            @if (errorHandling('Telefono', 'pattern')) {
+                            <mat-error>
+                                El teléfono solo deberá tener digitos <strong>numéricos</strong>.
+                            </mat-error>
+                            }
+                            @if(errorHandling('Telefono', 'minlength')) {
+
+                            <mat-error>
+                                El teléfono deberá tener digitos al menos
+                                <strong>8 digitos</strong>.
+                            </mat-error>
+                            }
+                            @if(errorHandling('Telefono', 'maxlength')) {
+                            <mat-error>
+                                El teléfono deberá tener digitos hasta
+                                <strong>12 digitos</strong>.
+                            </mat-error>
+                            }
+                        </div>
+                        
+                        <!-- Div vacío para asegurar que el último campo (Teléfono) se alinee a la izquierda si es el único en la última fila, aunque en este caso solo hay 5 campos, se añade por buena práctica. -->
+                        <div class="hidden md:block"></div>
                     </div>
+                    <!-- FIN DE LA REJILLA DE DOS COLUMNAS -->
+
                     <button type="submit" [disabled]="userForm.invalid"
                         class="mt-4 w-full text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200"
                         style="background-color: #e65100;">

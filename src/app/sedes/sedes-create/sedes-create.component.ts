@@ -60,7 +60,7 @@ export class SedesCreateComponent {
   reactiveForm() {
     this.userForm = this.fb.group({
       IdSede: ['', ''],
-      Nombre: ['', Validators.required],
+      Nombre: ['', [Validators.required, Validators.pattern('^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]+$')]],
     });
   }
 
@@ -91,11 +91,10 @@ export class SedesCreateComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
         this.user = data;
-          this.userForm.patchValue({
-            IdSede: this.user.IdSede,
-            Nombre: this.user.Nombre,
-          });
-
+        this.userForm.patchValue({
+          IdSede: this.user.IdSede,
+          Nombre: this.user.Nombre,
+        });
       });
   }
 

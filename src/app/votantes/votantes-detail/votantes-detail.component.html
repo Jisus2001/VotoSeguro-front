@@ -2,7 +2,7 @@
 <div id="authentication-modal" tabindex="-1" aria-hidden="true"
     class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75 scrollable"
     [class.hidden]="!isVisible">
-    <div class="relative p-4 w-full max-w-md max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full"> <!-- Aumentado max-w a max-w-2xl para acomodar 2 columnas -->
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow" style="color: rgb(5, 44, 101);">
             <div class="px-5 pt-5 flex justify-end">
@@ -27,50 +27,72 @@
             <!-- Modal body -->
             <div class="p-4 md:p-5">
                 <!-- Formulario para crear o actualizar usuario -->
-                <form [formGroup]="userForm" novalidate class="flex flex-col gap-4" >
+                <form [formGroup]="userForm" novalidate>
 
-                    <div class="mb-2 p-4 bg-gray-100 border border-gray-300 rounded-lg">
+                    <!-- Tipo de Perfil (Ocupa las dos columnas) -->
+                    <div class="md:col-span-2 p-4 bg-gray-100 border border-gray-300 rounded-lg">
                         <p class="text-sm font-semibold text-[#667085] mb-1">Tipo de Perfil</p>
                         <p class="text-base font-medium text-gray-800">{{ userForm.get('Perfil')?.value || 'No Asignado'
                             }}</p>
                         <p class="text-xs text-gray-500 mt-1">No se puede actualizar el tipo de perfil</p>
                     </div>
+                    <br>
 
-                                        <div>
-                        <label for="Identificacion" class="block mb-2 text-sm font-medium text-[#667085]">Identificación</label>
-                        <input [readOnly]="true" type="text" id="Identificacion" name="Identificacion"
-                            placeholder="123456789 (Nacional) ó 123456789012 (DIMEX)" formControlName="Identificacion"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
-                    </div>
+                    <!-- Contenedor principal con grid de 2 columnas en pantallas medianas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                    <div>
-                        <label for="Nombre" class="block mb-2 text-sm font-medium text-[#667085]">Nombre</label>
-                        <input [readOnly]="true" type="text" id="Nombre" placeholder="Nombre completo"
-                            name="Nombre" formControlName="Nombre"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
-                    </div>
-
-                    <div>
+                        <!-- Estado (Columna 1, Fila 1) -->
                         <div>
-                            <label for="Correo" class="block mb-2 text-sm font-medium text-[#344054]">Correo
-                            </label>
-                            <input [readOnly]="true" type="email" name="Correo" id="Correo"
-                                placeholder="ejemplo@gmail.com" formControlName="Correo"
+                            <label class="block mb-2 text-sm font-medium text-[#667085]">Estado</label>
+
+                            <input [readOnly]="true" type="text"
+                                [ngClass]="{'bg-red-100 border-red-400 text-red-700': estadoDinamico === 'Bloqueado'}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                [value]="estadoDinamico" />
+                        </div>
+
+                        <!-- Identificación (Columna 2, Fila 1) -->
+                        <div>
+                            <label for="Identificacion"
+                                class="block mb-2 text-sm font-medium text-[#667085]">Identificación</label>
+                            <input [readOnly]="true" type="text" id="Identificacion" name="Identificacion"
+                                placeholder="123456789 (Nacional) ó 123456789012 (DIMEX)"
+                                formControlName="Identificacion"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                required />
+                        </div>
+
+                        <!-- Nombre (Columna 1, Fila 2) -->
+                        <div>
+                            <label for="Nombre" class="block mb-2 text-sm font-medium text-[#667085]">Nombre</label>
+                            <input [readOnly]="true" type="text" id="Nombre" placeholder="Nombre completo" name="Nombre"
+                                formControlName="Nombre"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                required />
+                        </div>
+
+                        <!-- Correo (Columna 2, Fila 2) -->
+                        <div>
+                            <div>
+                                <label for="Correo" class="block mb-2 text-sm font-medium text-[#344054]">Correo
+                                </label>
+                                <input [readOnly]="true" type="email" name="Correo" id="Correo"
+                                    placeholder="ejemplo@gmail.com" formControlName="Correo"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    required />
+                            </div>
+                        </div>
+
+                        <!-- Telefono (Columna 1, Fila 3) -->
+                        <div>
+                            <label for="Telefono" class="block mb-2 text-sm font-medium text-[#667085]">Teléfono</label>
+                            <input [readOnly]="true" type="text" id="Telefono" placeholder="62503829" name="Telefono"
+                                formControlName="Telefono"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 required />
                         </div>
                     </div>
-
-
-                    <div>
-                        <label for="Telefono" class="block mb-2 text-sm font-medium text-[#667085]">Teléfono</label>
-                        <input [readOnly]="true" type="text" id="Telefono" placeholder="62503829" name="Telefono"
-                            formControlName="Telefono"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            required />
-                    </div>
+                    <br>
                 </form>
             </div>
         </div>

@@ -24,13 +24,13 @@
                 <!-- Contenido de la Elección (anteriormente el cuerpo de la página de detalle) -->
                 <div class="p-6 md:p-8 min-h-screen">
                     <!-- Contenedor principal de la tarjeta -->
-                    <mat-card *ngIf="eleccion" class="mx-auto max-w-4xl rounded-xl shadow-2xl p-6 md:p-10">
+                    <mat-card *ngIf="eleccion" class="mx-auto max-w-4xl rounded-xl shadow-2xl md:p-10">
 
                         <!-- Modal header -->
                         <div class="flex items-center justify-center">
                             <div>
                                 <h3 class="text-2xl text-center font-semibold text-[#252b36] pb-8">
-                                    Detalle de la Elección: <strong>{{ eleccion.Nombre }}</strong>
+                                    <strong>{{ eleccion.Nombre }}</strong>
                                 </h3>
                             </div>
                         </div>
@@ -72,8 +72,8 @@
                         <div class="my-8 border-t border-gray-200"></div>
 
                         <!-- Sección de Candidatos -->
-                        <h2 class="text-2xl font-bold text-[#252b36] mb-5 flex items-center">
-                            Candidatos Registrados ( {{ eleccion.Candidatos?.length || 0 }} )
+                        <h2 class="text-2xl font-semibold text-[#252b36] mb-5 flex items-center">
+                            Candidatos Registrados ( {{ eleccion.Candidatos.length || 0 }} )
                         </h2>
 
 
@@ -92,11 +92,7 @@
                                     <p class="text-xs text-gray-500 mt-1">ID: {{ candidato._id }}</p>
                                 </div>
 
-                                <div class="text-right">
-                                    <span class="text-sm font-medium text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
-                                        {{ candidato.Perfil.Descripcion }}
-                                    </span>
-                                </div>
+                          
 
                                 <!-- Total de Votos -->
                     

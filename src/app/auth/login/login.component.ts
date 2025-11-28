@@ -15,6 +15,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from '../../shared/generic.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -95,13 +96,33 @@ export class LoginComponent {
 
            this.router.navigate(['/dashboard']);
           },
-          (error) => {
-            this.noti.mensaje(
-              'Error en el Inicio de Sesión',
-              `Sus credenciales no son correctos. Verifiquelos e intente iniciar sesión otra vez.`,
-              TipoMessage.error
-            );
-            setTimeout(() => {
+          (error: HttpErrorResponse) => {
+            let titulo = 'Error al Iniciar Sesión';
+            let mensaje = 'Ha ocurrido un error inesperado al intentar iniciar sesión. Inténtelo de nuevo más tarde.';
+            let tipoMensaje = TipoMessage.error;
+
+            const errorBody = error.error;
+            switch (error.status) {
+              case 442: 
+              titulo = 'Usuario Bloqueado';
+              mensaje = errorBody.message || 'Cuenta bloqueada debido a intentos fallidos de inicio de sesión. Contacte a soporte para más información.';
+              break;
+            case 441: 
+              titulo = 'Credenciales Inválidas';
+              mensaje = errorBody.message || 'La identificación o la contraseña son incorrectas. Verifique sus datos e intente nuevamente.';
+              break;
+            case 500: 
+              titulo = 'Error del Servidor';
+              mensaje = errorBody.message || 'Ha ocurrido un error en el servidor. Por favor, inténtelo de nuevo más tarde.';
+              break;
+            default:
+              mensaje = errorBody.message || "Error desconocido. Por favor, inténtelo de nuevo.";
+              break;  
+            }
+
+            this.noti.mensaje(titulo, mensaje, tipoMensaje);
+
+             setTimeout(() => {
               window.location.reload();
             }, 2500);
           }

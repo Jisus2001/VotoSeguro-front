@@ -46,12 +46,6 @@ export const navItems: NavItem[] = [
     route: '/vigentes',
   },
   {
-    displayName: 'Ajustes',
-    iconPath: '../../../assets/menu-items/ajustes.png',
-    validation: "isAutenticated",
-    route: '/ajustes',
-  },
-  {
     displayName: 'Cerrar Sesión',
     iconPath: './../../assets/menu-items/cerrar-sesion.png',
     validation: "isAutenticated",

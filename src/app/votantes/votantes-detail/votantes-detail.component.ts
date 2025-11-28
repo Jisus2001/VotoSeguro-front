@@ -26,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-  ],
+],
   templateUrl: './votantes-detail.component.html',
   styleUrl: './votantes-detail.component.scss',
 })
@@ -38,6 +38,7 @@ export class VotantesDetailComponent {
   Telefono: any;
   Correo: any;
   Perfil: any;
+  Bloqueado: any;
 
   makeSubmit: boolean = false;
   numRegex = '^[0-9]*$';
@@ -81,6 +82,7 @@ export class VotantesDetailComponent {
       Telefono: ['', ''],
       Correo: ['', ''],
       Perfil: ['', ''],
+      Bloqueado: ['', ''],
     });
   }
 
@@ -120,7 +122,10 @@ export class VotantesDetailComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
         this.user = data;
-        this.userData = data; 
+        this.userData = data;
+
+        this.Bloqueado = this.userData.BloqueadoHasta; 
+
         this.userForm.patchValue({
           Identificacion: this.userData.Identificacion,
           Nombre: this.userData.Nombre,
@@ -128,13 +133,28 @@ export class VotantesDetailComponent {
           Telefono: this.userData.Telefono,
           Correo: this.userData.Correo,
           Perfil: this.userData.Perfil,
+          Bloqueado: this.userData.BloqueadoHasta,
         });
+
+        console.log(this.userForm.value); 
+        console.log(this.Bloqueado); 
+
       });
 
     const identificationControl = this.userForm.get('Identificacion');
 
     if (this.isCreate === false) {
       identificationControl?.disable();
+    }
+  }
+
+   get estadoDinamico(): 'Activo' | 'Bloqueado' {
+
+    if (this.Bloqueado === null || this.Bloqueado === undefined) {
+      return 'Activo';
+    }
+    else {
+      return 'Bloqueado';
     }
   }
 
