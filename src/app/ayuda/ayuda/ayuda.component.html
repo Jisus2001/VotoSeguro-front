@@ -1,0 +1,55 @@
+<div class="dashboard-wrapper">
+    <app-header></app-header>
+    <div class="dashboard-body">
+        <aside class="sidebar">
+            <app-menu></app-menu>
+        </aside>
+
+        <main class="main-content">
+            <!-- Contenedor principal para el componente de ayuda -->
+            <div class="help-card">
+                <!-- Encabezado de la Tarjeta -->
+                <div class="help-header flex items-center mb-6 pb-3 border-b-4 border-blue-500/50">
+                    <!-- Icono grande para captar la atención -->
+                    <i class="fas fa-question-circle text-4xl text-blue-600 mr-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-800">Asistencia Rápida</h2>
+                </div>
+
+                <p class="help-description text-gray-600 mb-8 leading-relaxed">
+                    Si encuentra algún problema técnico, tiene consultas sobre el proceso de votación o necesita
+                    asistencia, no dude en contactarnos.
+                </p>
+
+                <!-- Sección de Contacto por Teléfono -->
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <div class="contact-details">
+                        <h3>Llama a Soporte Técnico</h3>
+                        <p>Horario: Lunes a Viernes de 8:00 a 17:00</p>
+                        <a href="tel:+(506)24355000"
+                            class="contact-link phone-link font-medium truncate hover:underline">
+                            +(506) 2465-5000
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Separador -->
+                <hr class="separator">
+
+                <!-- Sección de Contacto por Correo Electrónico -->
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div class="contact-details">
+                        <h3>Envía un Correo Electrónico</h3>
+                        <p>Te responderemos tan pronto como sea posible.</p>
+                        <a href="mailto:soporte@votoseguro.ac.cr"
+                            class="contact-link email-link font-medium truncate hover:underline">
+                            soporte@votoseguro.ac.cr
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</div>

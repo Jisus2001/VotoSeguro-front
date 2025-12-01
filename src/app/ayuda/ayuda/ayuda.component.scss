@@ -1,0 +1,143 @@
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
+  color: rgb(5, 44, 101);
+}
+
+.dashboard-body {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: auto;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: rgb(5, 44, 101);
+
+  padding: 20px 0;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #f7f9fc;
+  overflow-y: auto;
+}
+
+
+/* Estilos para el contenedor principal de la tarjeta de ayuda */
+.help-card {
+  background-color: #f7f9fc; /* Fondo ligeramente gris para destacar */
+  border: 1px solid #e0e6ed;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  margin: 30px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Estilos para el encabezado */
+.help-header {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #0e2148; /* Línea de color de acento */
+  padding-bottom: 10px;
+  
+}
+
+.help-header h2 {
+  color: rgb(5, 44, 101);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-left: 15px;
+}
+
+/* Estilos para la descripción general */
+.help-description {
+  color: #4b5563;
+  margin-bottom: 25px;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* Estilos para los elementos de contacto */
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.contact-item > i {
+  font-size: 1.4rem;
+  color: #18921c; /* Color verde para íconos de contacto */
+  margin-right: 15px;
+  margin-top: 5px;
+}
+
+.contact-details h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  color: rgb(5, 44, 101);
+  font-weight: 600;
+}
+
+.contact-details p {
+  margin: 0 0 8px 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.contact-link {
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s ease;
+  display: inline-block;
+  color: rgb(5, 44, 101);
+}
+
+
+/* Estilos para el separador */
+.separator {
+  border: 0;
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 20px 0;
+}
+
+/* Estilos para la acción de correo y botón de copiar */
+.email-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.copy-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.copy-button:hover {
+  background-color: #2563eb;
+}
+
+.copy-button:active {
+  transform: scale(0.98);
+}
+
+.copy-button i {
+  margin: 0;
+  font-size: 1rem;
+}

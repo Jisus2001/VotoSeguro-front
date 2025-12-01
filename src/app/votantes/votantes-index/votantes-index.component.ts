@@ -80,6 +80,7 @@ export class VotantesIndexComponent implements OnInit, AfterViewInit {
    estados = [
     { name: 'Todos', label: 'Todos los votantes' },
     { name: 'Bloqueado', label: 'Bloqueado' },
+    { name: 'Activo', label: 'Activo' },
   ];
 
   constructor(
@@ -145,6 +146,10 @@ export class VotantesIndexComponent implements OnInit, AfterViewInit {
       if (this.selectedEstado === 'Bloqueado') {
         currentData = currentData.filter(
           (data: any) => data.BloqueadoHasta !== null
+        );
+      } else if (this.selectedEstado === 'Activo') {
+        currentData = currentData.filter(
+          (data: any) => data.BloqueadoHasta === null
         );
       }
     }

@@ -11,6 +11,8 @@ import { CandidatosIndexComponent } from './candidatos/candidatos-index/candidat
 import { PerfilesIndexComponent } from './perfiles/perfiles-index/perfiles-index.component';
 import { CandidatosEleccionesComponent } from './candidatos/candidatos-elecciones/candidatos-elecciones.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
+import { EleccionesParticipacionComponent } from './elecciones/elecciones-participacion/elecciones-participacion.component';
+import { AyudaComponent } from './ayuda/ayuda/ayuda.component';
 
 export const routes: Routes = [
   // Página inicial: login
@@ -52,6 +54,14 @@ export const routes: Routes = [
   {
     path: 'vigentes',
     component: CandidatosEleccionesComponent,
+  },
+  {
+    path: 'reporte',
+    component: EleccionesParticipacionComponent,
+  },
+  {
+    path: 'ayuda',
+    component: AyudaComponent,
   },
   // Ruta directa al registro (opcional, si quieres permitir acceso fuera del dashboard)
   // { path: 'registro', component: RegistroComponent },

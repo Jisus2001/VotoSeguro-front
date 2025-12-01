@@ -18,6 +18,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { EleccionesCreateComponent } from '../elecciones-create/elecciones-create.component';
 import { EleccionesDeleteComponent } from '../elecciones-delete/elecciones-delete.component';
 import { EleccionesDetailComponent } from '../elecciones-detail/elecciones-detail.component';
+import { EleccionesParticipacionComponent } from '../elecciones-participacion/elecciones-participacion.component';
+import { NotificacionService, TipoMessage } from '../../shared/notification.service';
 
 export interface Elecciones {
   _id: number;
@@ -58,6 +60,7 @@ export interface Sedes {
     EleccionesCreateComponent,
     EleccionesDeleteComponent,
     EleccionesDetailComponent,
+    EleccionesParticipacionComponent,
   ],
   templateUrl: './elecciones-index.component.html',
   styleUrl: './elecciones-index.component.scss',
@@ -68,6 +71,8 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
   @ViewChild('eleccionFormModal') eleccionFormModal!: EleccionesCreateComponent;
   @ViewChild('deleteEleccionModal') deleteEleccionModal!: EleccionesDeleteComponent;
   @ViewChild('eleccionDetalleModal') eleccionDetalleModal!: EleccionesDetailComponent;
+  @ViewChild('eleccionParticipacionModal')
+  eleccionParticipacionModal!: EleccionesParticipacionComponent;
 
   dataSource = new MatTableDataSource<Elecciones>();
   datos: Elecciones[] = []; // Datos de ejemplo
@@ -80,10 +85,19 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
   selectedSede: string = 'Todos'; // Inicia por defecto en 'Todos'
   searchNombre: string = '';
 
+  selectedEstado: string = 'Todos'; // Filtro por estado
+
+  estados = [
+    { name: 'Todos', label: 'Todos las elecciones' },
+    { name: 'Activa', label: 'Activa' },
+    { name: 'Inactiva', label: 'Inactiva' },
+  ];
+
   constructor(
     private gService: GenericService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private noti: NotificacionService
   ) {}
 
   ngOnInit(): void {
@@ -130,7 +144,6 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (data: any) => {
           this.datosSede = data as Sedes[];
-          console.log(this.datosSede);
         },
         error: (error: any) => {
           console.error('Error fetching votantes', error);
@@ -162,12 +175,19 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
       // Convertimos el valor seleccionado (que es numérico, pero viene del ngModel como string/number) a number
       const selectedSedeId = Number(this.selectedSede);
 
-      currentData = currentData.filter(
-        (data: Elecciones) =>
-          // Filtramos comparando el IdSede de la elección (data.Sede.IdSede) con el ID seleccionado
-          // Usamos el optional chaining operator (?.) en caso de que Sede sea null o undefined
-          data.Sede?.IdSede === selectedSedeId
-      );
+      currentData = currentData.filter((data: Elecciones) => data.Sede?.IdSede === selectedSedeId);
+    }
+
+        if (this.selectedEstado && this.selectedEstado !== 'Todos') {
+      if (this.selectedEstado === 'Inactiva') {
+        currentData = currentData.filter(
+          (data: any) => data.FechaFin < new Date().toISOString()
+        );
+      } else if (this.selectedEstado === 'Activa') {
+        currentData = currentData.filter(
+          (data: any) => data.FechaFin > new Date().toISOString()
+        );
+      }
     }
 
     if (this.searchNombre) {
@@ -185,7 +205,36 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
   }
 
   redirectDetalle(id: any) {
-    this.eleccionDetalleModal.openModal(id); 
+    this.eleccionDetalleModal.openModal(id);
+  }
+
+  isElectionOpen(fechaFin: string): boolean {
+    const today = new Date();
+    // Normalizar la fecha de hoy a medianoche (00:00:00) para comparar solo la fecha
+    today.setHours(0, 0, 0, 0);
+
+    // Asumimos que FechaFin viene en formato ISO (YYYY-MM-DD...) que Date() puede parsear
+    const cierreDate = new Date(fechaFin);
+    cierreDate.setHours(0, 0, 0, 0);
+
+    // Si la fecha de cierre es HOY o en el futuro, la elección sigue abierta (no se puede reportar).
+    return cierreDate >= today;
+  }
+
+  redirectReport(row: Elecciones) {
+    if (this.isElectionOpen(row.FechaFin)) {
+      // Muestra la notificación si la elección aún no ha cerrado
+      const fechaCierre = new Date(row.FechaFin).toLocaleDateString('es-ES'); // Formateo simple
+      this.noti.mensaje(
+        'Reporte no disponible',
+        `La elección "${row.Nombre}" aún no ha cerrado. Fecha de cierre: ${fechaCierre}.`,
+        TipoMessage.warning
+      );
+      return; // Detener la ejecución
+    } else {
+      // Si la elección ya cerró, procede a abrir el modal
+      this.eleccionParticipacionModal.openModal(row._id, row.Nombre);
+    }
   }
 
   crear() {

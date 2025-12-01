@@ -30,10 +30,10 @@
       <p>Candidatos</p>
     </button>
 
-    <button class="menu-item" (click)="onItemSelected({ displayName: 'Reportes', route: '/reportes' })"
-      [class.activo]="router.isActive('/reportes', true)">
-      <img class="icono" src="../../../assets/menu-items/reporte-de-negocios.png" alt="Reportes" />
-      <p>Reportes</p>
+    <button class="menu-item" (click)="onItemSelected({ displayName: 'Auditoría', route: '/auditoria' })"
+      [class.activo]="router.isActive('/auditoria', true)">
+      <img class="icono" src="../../../assets/menu-items/reporte-de-negocios.png" alt="Auditoría" />
+      <p>Auditoría</p>
     </button>
     }
 
@@ -44,11 +44,17 @@
       <p>Candidatos</p>
     </button>
     }
-    
+
     <button class="menu-item" (click)="onItemSelected({ displayName: 'Cerrar Sesión', route: '/logout' })"
       [class.activo]="router.isActive('/logout', true)">
       <img class="icono" src="../../../assets/menu-items/cerrar-sesion.png" alt="Cerrar Sesión" />
       <p>Cerrar Sesión</p>
+    </button>
+
+    <button class="menu-item" style="margin-top: 40px; background-color: rgba(128, 128, 128, 0.199);" (click)="onItemSelected({ displayName: 'Ayuda', route: '/ayuda' })"
+      [class.activo]="router.isActive('/ayuda', true)">
+      <img class="icono" src="../../../assets/menu-items/help.png" alt="Ayuda" />
+      <p>Ayuda</p>
     </button>
   </div>
   <!-- FIN Botones -->

@@ -34,10 +34,10 @@ export const navItems: NavItem[] = [
     route: '/candidatos',
   },
   {
-    displayName: 'Reportes',
+    displayName: 'Auditoría',
     iconPath: '../../../assets/menu-items/reporte-de-negocios.png',
     validation: "isAutenticated",
-    route: '/reportes',
+    route: '/auditoria',
   },
       {
     displayName: 'Vigentes',

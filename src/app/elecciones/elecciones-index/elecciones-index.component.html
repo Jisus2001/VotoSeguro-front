@@ -36,8 +36,6 @@
                 <!-- Contenedor de Filtros -->
                 <div class="filters-container flex w-full h-fit p-2 px-8 bg-white z-10 relative">
 
-
-
                     <div class="max-w-md mx-auto pt-4 pr-5">
                         <select id="role-filter" name="selectedRole" [(ngModel)]="selectedSede"
                             (change)="onFilterChange()"
@@ -48,6 +46,22 @@
                             @for (sede of datosSede; track sede.Nombre) {
                             <option [value]="sede.IdSede">
                                 {{ sede.Nombre }}
+                            </option>
+                            }
+                        </select>
+                    </div>
+
+                    <span class="example-spacer"></span>
+
+                    <div class="max-w-md mx-auto pt-4 pr-5">
+                        <select id="estado-filter" name="selectedEstado" [(ngModel)]="selectedEstado"
+                            (change)="onFilterChange()"
+                            class="text-[#667085] font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center border bg-white">
+
+                            <!-- Opciones de roles. Asumo que `roles` tiene `name` y `label` -->
+                            @for (estado of estados; track estado.name) {
+                            <option [value]="estado.name">
+                                {{ estado.label }}
                             </option>
                             }
                         </select>
@@ -128,6 +142,10 @@
                                         <mat-icon>visibility</mat-icon>
                                     </button>
 
+                                    <button mat-icon-button (click)="redirectReport(row)">
+                                        <mat-icon>insert_chart</mat-icon>
+                                    </button>
+
                                     <button mat-icon-button (click)="update(row._id)">
                                         <mat-icon>edit</mat-icon>
                                     </button>
@@ -166,3 +184,4 @@
 <app-elecciones-create #eleccionFormModal></app-elecciones-create>
 <app-elecciones-delete #deleteEleccionModal></app-elecciones-delete>
 <app-elecciones-detail #eleccionDetalleModal></app-elecciones-detail>
+<app-elecciones-participacion #eleccionParticipacionModal></app-elecciones-participacion>

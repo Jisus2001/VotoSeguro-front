@@ -1,0 +1,65 @@
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
+  color: rgb(5, 44, 101);
+}
+
+.dashboard-body {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: auto;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: rgb(5, 44, 101);
+
+  padding: 20px 0;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+.titulo {
+  font-style: italic;
+  font-weight: bold;
+  font-size: 30px;
+  color: white;
+}
+
+.btncrear {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+.btncrear:hover {
+  filter: brightness(1.1);
+}
+
+.scrollable {
+    overflow-y: auto;
+}
+
+mat-error{
+    color: firebrick !important;
+    font-size: small !important;
+    margin: 0px 2.5px !important;
+}
+
+.main-content {
+      color: rgb(5, 44, 101);
+
+}

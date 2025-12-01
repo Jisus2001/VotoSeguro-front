@@ -1,6 +1,6 @@
 <!-- 1. MODAL DE CONFIRMACIÓN DE VOTO (Controlado por isVisible) -->
 <div id="authentication-modal" tabindex="-1" aria-hidden="true"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75 transition-opacity" 
+    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75 transition-opacity"
     [class.hidden]="!isVisible">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <div class="relative bg-white rounded-lg shadow-2xl">
@@ -34,21 +34,19 @@
 
                 <!-- Botones de Acción -->
                 <div class="flex flex-col space-y-3">
-                    <button type="button" (click)="confirmVote()"
-                        [disabled]="isVoting"
+                    <button type="button" (click)="confirmVote()" [disabled]="isVoting"
                         class="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-lg px-5 py-3 text-center transition duration-200 shadow-lg flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
-                        
+
                         <!-- SPINNER DE CARGA -->
                         @if (isVoting) {
-                            <mat-spinner diameter="20" class="mr-2 text-white"></mat-spinner>
-                            Registrando...
+                        <mat-spinner diameter="20" class="mr-2 text-white"></mat-spinner>
+                        Registrando...
                         } @else {
-                            Sí, confirmo mi voto
+                        Sí, confirmo mi voto
                         }
                     </button>
 
-                    <button type="button" (click)="closeModal()"
-                        [disabled]="isVoting"
+                    <button type="button" (click)="closeModal()" [disabled]="isVoting"
                         class="w-full py-3 px-5 text-lg font-medium text-gray-700 focus:outline-none bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-800 focus:z-10 focus:ring-4 focus:ring-gray-100 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                         Cancelar
                     </button>
@@ -58,28 +56,25 @@
     </div>
 </div>
 
-<!-- 2. PANTALLA DE ÉXITO TEMPORAL (Controlado por showSuccessMessage) -->
-<!-- Este overlay aparecerá por 3 segundos después de un voto exitoso -->
+@if(showSuccessMessage){
+<div class="fixed inset-0 z-[60] flex items-center justify-center bg-white transition-all duration-500 ease-in-out">
+    <div class="p-12 text-center transform scale-100 transition-transform duration-500 animate-pulse-once"
+        style=" color: #052c67;">
 
-   @if(showSuccessMessage){
-     <div class="fixed inset-0 z-[60] flex items-center justify-center bg-white transition-all duration-500 ease-in-out" >
-        <div class="p-12 text-center transform scale-100 transition-transform duration-500 animate-pulse-once" style=" color: #052c67;">
-            
-            <!-- Icono de Check Grande -->
-            <i class="fa fa-check-circle fa-4x pb-4"></i>
+        <!-- Icono de Check Grande -->
+        <i class="fa fa-check-circle fa-4x pb-4"></i>
 
-            <h2 class="text-4xl font-extrabold mb-2">
-                ¡Voto Registrado!
-            </h2>
-            
-            <p class="text-xl">
-                Su elección ha sido registrada de forma exitosa
-            </p>
+        <h2 class="text-4xl font-extrabold mb-2">
+            ¡Voto Registrado!
+        </h2>
 
-            <p class="mt-6 text-sm font-semibold">
-                Será redirigido automáticamente en un momento...
-            </p>
-        </div>
+        <p class="text-xl">
+            Su elección ha sido registrada de forma exitosa
+        </p>
+
+        <p class="mt-6 text-sm font-semibold">
+            Será redirigido automáticamente en un momento...
+        </p>
     </div>
-   }
-
+</div>
+}
