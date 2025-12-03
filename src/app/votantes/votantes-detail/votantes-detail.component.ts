@@ -136,8 +136,6 @@ export class VotantesDetailComponent {
           Bloqueado: this.userData.BloqueadoHasta,
         });
 
-        console.log(this.userForm.value); 
-        console.log(this.Bloqueado); 
 
       });
 

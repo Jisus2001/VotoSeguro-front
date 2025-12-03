@@ -92,7 +92,6 @@ export class PerfilesIndexComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (data: any) => {
           this.datos = data as Perfiles[];
-          console.log(this.datos);
           this.updateTable(this.datos);
         },
         error: (error: any) => {

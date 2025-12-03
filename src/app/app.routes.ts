@@ -1,7 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { OlvidarPassComponent } from './auth/olvidar-pass/olvidar-pass.component';
 import { LogoutComponent } from './shared/logout/logout.component';
 import { VotantesIndexComponent } from './votantes/votantes-index/votantes-index.component';
 import { NgModule } from '@angular/core';
@@ -13,70 +12,80 @@ import { CandidatosEleccionesComponent } from './candidatos/candidatos-eleccione
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { EleccionesParticipacionComponent } from './elecciones/elecciones-participacion/elecciones-participacion.component';
 import { AyudaComponent } from './ayuda/ayuda/ayuda.component';
+import { AuthGuard, PersonasRoleGuard } from './services/personas.guard';
+
+const ROL_ADMIN = 'Administrador';
+const ROL_VOTANTE = 'Votante';
 
 export const routes: Routes = [
   // Página inicial: login
-  { path: '', component: LoginComponent },
-  {
-    path: 'olvidar',
-    component: OlvidarPassComponent,
-  },
+  { path: '', component: LoginComponent},
 
   // Dashboard con rutas hijas
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
+    data: { rol: [ROL_ADMIN, ROL_VOTANTE] },
   },
 
   //Votantes
   {
     path: 'votantes',
     component: VotantesIndexComponent,
+    canActivate: [AuthGuard],
+    data: { rol: [ROL_ADMIN] },
   },
 
   {
     path: 'elecciones',
     component: EleccionesIndexComponent,
+    canActivate: [AuthGuard],
+    data: { rol: [ROL_ADMIN] },
   },
 
   {
     path: 'sedes',
     component: SedesIndexComponent,
+    canActivate: [AuthGuard],
+    data: { rol: [ROL_ADMIN] },
   },
   {
     path: 'candidatos',
     component: CandidatosIndexComponent,
+    canActivate: [AuthGuard],
+    data: { rol: [ROL_ADMIN] },
   },
   {
     path: 'perfiles',
     component: PerfilesIndexComponent,
+    canActivate: [AuthGuard],
+    data: { rol: [ROL_ADMIN] },
   },
   {
     path: 'vigentes',
     component: CandidatosEleccionesComponent,
+    canActivate: [AuthGuard],
+    data: { rol: [ROL_VOTANTE] },
   },
   {
     path: 'reporte',
     component: EleccionesParticipacionComponent,
+    canActivate: [AuthGuard],
+    data: { rol: [ROL_ADMIN] },
   },
   {
     path: 'ayuda',
     component: AyudaComponent,
+    canActivate: [AuthGuard],
+    data: { rol: [ROL_ADMIN, ROL_VOTANTE] },
   },
-  // Ruta directa al registro (opcional, si quieres permitir acceso fuera del dashboard)
-  // { path: 'registro', component: RegistroComponent },
-
-  // Redirección por defecto (opcional si usas guards)
   {
     path: 'logout',
     component: LogoutComponent,
   },
-  { path: 'notfound', 
-    component: NotFoundComponent 
-  },
-  { path: '**', 
-    redirectTo: '/notfound' 
-  },
+  { path: 'notfound', component: NotFoundComponent },
+  { path: '**', redirectTo: '/notfound' },
 ];
 
 @NgModule({

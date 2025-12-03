@@ -17,12 +17,19 @@ export class NotFoundComponent implements OnInit {
   rol: string = '';
 
   ngOnInit() {
-    this.nombre = window.localStorage.getItem('Nombre') || 'Usuario';
-    this.rol = window.localStorage.getItem('Rol') || 'Rol';
+
+    this.personasService.decodeToken.subscribe((user: any) => {
+      this.user = user;
+    });
+
+    if (!this.user) {
+      const token = this.personasService.getToken();
+    }
+
   }
   
   volver(): void {
-    if (this.nombre !== null) {
+    if (this.user.nombre !== null) {
       this.router.navigate(['/dashboard']);
     } else {
       this.router.navigate(['/']);

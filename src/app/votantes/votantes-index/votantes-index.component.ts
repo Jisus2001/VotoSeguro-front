@@ -119,8 +119,6 @@ export class VotantesIndexComponent implements OnInit, AfterViewInit {
           this.datos = data as Persona[];
 
           this.updateTable(this.datos);
-
-          console.log('Votantes fetched successfully', this.datos);
         },
         error: (error: any) => {
           console.error('Error fetching votantes', error);

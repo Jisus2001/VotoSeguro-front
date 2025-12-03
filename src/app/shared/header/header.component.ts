@@ -10,18 +10,18 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class HeaderComponent implements OnInit {
   user: any = null;
-  nombre: string = '';
-  rol: string = '';
 
-  constructor(
-    public personasService: PersonasService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+
+  constructor(public personasService: PersonasService) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.nombre = window.localStorage.getItem('Nombre') || 'Usuario';
-      this.rol = window.localStorage.getItem('Rol') || 'Rol';
+
+    this.personasService.decodeToken.subscribe((user: any) => {
+      this.user = user;
+    });
+
+    if (!this.user) {
+      const token = this.personasService.getToken();
     }
   }
 }

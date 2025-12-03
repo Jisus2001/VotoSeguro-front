@@ -96,8 +96,6 @@ export class SedesDeleteComponent {
   }
 
   loadSede(id: any): void {
-    console.log(this.IdSede);
-    console.log(id);
 
     this.gService
       .get('sedes/ObtenerSede', id)

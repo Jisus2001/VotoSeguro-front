@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { PersonasService } from '../services/personas.service';
-import { MenuComponent } from "../shared/menu/menu.component";
+import { MenuComponent } from '../shared/menu/menu.component';
 import { HeaderComponent } from '../shared/header/header.component';
 
 @Component({
@@ -18,8 +18,15 @@ export class DashboardComponent implements OnInit {
   rol: string = '';
 
   ngOnInit() {
-    this.nombre = window.localStorage.getItem('Nombre') || 'Usuario';
-    this.rol = window.localStorage.getItem('Rol') || 'Rol';
+ 
+    this.personasService.decodeToken.subscribe((user: any) => {
+      this.user = user;
+    });
+    
+    if(!this.user){
+      const token = this.personasService.getToken();
+    }
+
   }
 
   logout(): void {

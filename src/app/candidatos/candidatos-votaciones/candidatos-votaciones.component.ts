@@ -1,24 +1,23 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from '../../shared/generic.service';
 import { NotificacionService, TipoMessage } from '../../shared/notification.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { PersonasService } from '../../services/personas.service';
 
 @Component({
   selector: 'app-candidatos-votaciones',
   standalone: true,
-  imports: 
-  [
-    MatProgressSpinner,
-  ],
+  imports: [MatProgressSpinner],
   templateUrl: './candidatos-votaciones.component.html',
   styleUrl: './candidatos-votaciones.component.scss',
 })
-export class CandidatosVotacionesComponent {
+export class CandidatosVotacionesComponent implements OnInit {
   showSuccessMessage: boolean = false;
   isVoting: boolean = false;
+  user: any = null;
 
   isVisible = false;
   idUser: string | null = null;
@@ -37,7 +36,8 @@ export class CandidatosVotacionesComponent {
     public fb: FormBuilder,
     private router: Router,
     private gService: GenericService,
-    private noti: NotificacionService
+    private noti: NotificacionService,
+    public personasService: PersonasService
   ) {
     // Inicializar el formulario aquí en el constructor
     this.userForm = this.fb.group({
@@ -46,6 +46,16 @@ export class CandidatosVotacionesComponent {
       idCandidato: [''],
       Partido: [''],
     });
+  }
+
+  ngOnInit() {
+    this.personasService.decodeToken.subscribe((user: any) => {
+      this.user = user;
+    });
+
+    if (!this.user) {
+      const token = this.personasService.getToken();
+    }
   }
 
   openModal(idE: string, idC: string, part: string) {

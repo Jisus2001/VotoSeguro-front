@@ -72,7 +72,6 @@ export class EleccionesParticipacionComponent {
     this.loadParticipacion(id);
     this.loadCandidatos(id);
     this.NombreEleccion = Nombre;
-    console.log(id);
   }
 
   loadParticipacion(id: any) {
@@ -83,7 +82,6 @@ export class EleccionesParticipacionComponent {
       .subscribe({
         next: (data: ParticipacionData) => {
           this.participacionData = data;
-          console.log('Datos de Participación cargados:', this.participacionData);
         },
         error: (err) => {
           console.error('Error al cargar la participación:', err);
@@ -104,7 +102,6 @@ export class EleccionesParticipacionComponent {
       .subscribe({
         next: (data: EleccionVotos) => {
           this.votosResultados = data.resultados;
-          console.log('Datos de Votos de Candidatos cargados:', this.votosResultados);
           this.createVotosChart(); // Llamada para generar el gráfico de votos
         },
         error: (error: any) => {

@@ -10,7 +10,7 @@
       <p>Dashboard</p>
     </button>
 
-    @if(this.rol === 'Administrador') {
+    @if(user?.rol === 'Administrador') {
 
     <button class="menu-item" (click)="onItemSelected({ displayName: 'Votantes', route: '/votantes' })"
       [class.activo]="router.isActive('/votantes', true)">
@@ -37,7 +37,7 @@
     </button>
     }
 
-    @else {
+    @if (user?.rol === 'Votante') {
     <button class="menu-item" (click)="onItemSelected({ displayName: 'Vigentes', route: '/vigentes' })"
       [class.activo]="router.isActive('/vigentes', true)">
       <img class="icono" src="../../../assets/menu-items/candidato.png" alt="Candidatos" />

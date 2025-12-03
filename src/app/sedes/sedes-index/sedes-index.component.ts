@@ -94,7 +94,6 @@ export class SedesIndexComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (data: any) => {
           this.datos = data as Sedes[];
-          console.log(this.datos);
           this.updateTable(this.datos);
         },
         error: (error: any) => {

@@ -13,20 +13,16 @@ import { isPlatformBrowser } from '@angular/common';
 export class MenuComponent implements OnInit{
   navItems = navItems; // Asigna los elementos del menú a una propiedad
   user: any;
-  nombre: string = ''; 
-  rol: string = ''; 
   
   constructor(
     public router: Router,
     public personasService: PersonasService,
-    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.nombre = window.localStorage.getItem('Nombre') || 'Usuario';
-      this.rol = window.localStorage.getItem('Rol') || 'Rol';
-    }
+    this.personasService.decodeToken.subscribe((user: any) => {
+      this.user = user;
+    });
   }
   
   // Método para manejar la navegación cuando se selecciona un elemento

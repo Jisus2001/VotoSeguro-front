@@ -88,7 +88,6 @@ export class CandidatosEleccionesComponent implements OnInit, AfterViewInit {
   showVotoRealizadoOverlay = signal(false);
   showSuccessMessage: boolean = false;
 
-  // Identificación del usuario obtenida del localStorage
   userIdentificacion: string | null = null;
 
   constructor(private gService: GenericService, private noti: NotificacionService) {}
@@ -127,13 +126,6 @@ export class CandidatosEleccionesComponent implements OnInit, AfterViewInit {
   }
 
   loadVotosRealizados() {
-    this.userIdentificacion = window.localStorage.getItem('ID') || 'ID';
-
-    if (!this.userIdentificacion) {
-      console.warn('Identificación del usuario no encontrada. No se pueden cargar votos.');
-      this.isLoading.set(false);
-      return;
-    }
 
     this.gService
       .list(`votos/PorPersona/${this.userIdentificacion}`)

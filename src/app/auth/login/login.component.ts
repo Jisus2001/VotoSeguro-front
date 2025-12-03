@@ -65,6 +65,8 @@ export class LoginComponent {
 
 
   iniciarSesion() {
+    this.submitted = true;
+
     this.identificacion = this.userForm.value.identificacion;
     this.contrasenna = this.userForm.value.contrasenna;
 
@@ -79,15 +81,13 @@ export class LoginComponent {
 
     if (this.userForm.value) {
       this.personasService
-        .login(this.identificacion, this.contrasenna)
+        .login(this.userForm.value.identificacion, this.userForm.value.contrasenna)
         .pipe(takeUntil(this.destroy$))
         .subscribe(
           (res: any) => {
 
-            localStorage.setItem('Nombre', res.nombre);
-            localStorage.setItem('Rol', res.rol);
-            localStorage.setItem('ID', this.userForm.value.identificacion); 
-
+            this.respuesta = res;
+            
             this.noti.mensaje(
               'Bienvenido a Voto Seguro',
               `Se ha logrado iniciar sesión con éxito.`,
@@ -116,7 +116,7 @@ export class LoginComponent {
               mensaje = errorBody.message || 'Ha ocurrido un error en el servidor. Por favor, inténtelo de nuevo más tarde.';
               break;
             default:
-              mensaje = errorBody.message || "Error desconocido. Por favor, inténtelo de nuevo.";
+              mensaje = error.message || errorBody.message || "Error desconocido. Por favor, inténtelo de nuevo.";
               break;  
             }
 

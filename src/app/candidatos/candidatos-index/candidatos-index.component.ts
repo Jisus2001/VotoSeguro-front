@@ -113,7 +113,6 @@ export class CandidatosIndexComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (data: any) => {
           this.datos = data as Candidatos[];
-          console.log(this.datos);
 
           this.updateTable(this.datos);
         },
@@ -130,7 +129,6 @@ export class CandidatosIndexComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (data: any) => {
           this.datosPerfil = data as Perfil[];
-          console.log(this.datosPerfil);
         },
         error: (error: any) => {
           console.error('Error fetching votantes', error);

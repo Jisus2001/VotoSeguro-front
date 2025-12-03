@@ -127,7 +127,6 @@ export class EleccionesIndexComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (data: any) => {
           this.datos = data as Elecciones[];
-          console.log(this.datos);
 
           this.updateTable(this.datos);
         },

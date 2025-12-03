@@ -96,8 +96,6 @@ export class PerfilesDeleteComponent {
   }
 
   loadPerfil(id: any): void {
-    console.log(this.IdPerfil);
-    console.log(id);
 
     this.gService
       .get('perfiles/ObtenerPerfil', id)

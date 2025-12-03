@@ -170,7 +170,6 @@ export class EleccionesCreateComponent implements OnInit {
 
   openModal(id?: any) {
     this.isVisible = true;
-    console.log(id);
 
     if (id !== undefined) {
       // Modo Actualización
@@ -306,7 +305,6 @@ export class EleccionesCreateComponent implements OnInit {
             FechaFin: fechaFinInput,
             FechaFinTime: horaFinInput,
           });
-          console.log(this.userForm.value);
         },
         (error: any) => {
           console.error('Error al cargar datos de la elección:', error);
@@ -362,8 +360,6 @@ export class EleccionesCreateComponent implements OnInit {
       FechaInicio: fechaInicioLocal ? fechaInicioLocal.toISOString() : null,
       FechaFin: fechaFinLocal ? fechaFinLocal.toISOString() : null,
     };
-
-    console.log(formData);
 
     if (this.isCreate) {
       if (this.userForm.value) {

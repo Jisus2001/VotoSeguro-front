@@ -74,7 +74,6 @@ export class VotantesDesactivarComponent {
 
   // Método para manejar el envío del formulario
   onSubmit() {
-    console.log(this.Identificacion); 
     if (this.userForm.value) {
       this.gService
         .remove(`personas/Eliminar`, this.Identificacion)
@@ -111,6 +110,5 @@ export class VotantesDesactivarComponent {
           Identificacion: this.userData.Identificacion,
         });
       });
-    console.log(this.Identificacion);
   }
 }
